@@ -1,0 +1,29 @@
+.first-enter-active,
+.first-leave-active {
+    transition: opacity 0.5s;
+}
+
+.first-enter,
+.first-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.8s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.fades-enter-active,
+.fades-leave-active {
+    transition: opacity 1.5s;
+}
+
+.fades-enter,
+.fades-leave-to {
+    opacity: 0;
+}
