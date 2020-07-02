@@ -8,59 +8,75 @@
           id="downloadCard"
           color="#3f51a5"
           class="mx-auto rounded-xl pa-md-5 pa-5"
-          max-width="800"
           min-width="350"
-          min-height="370"
+          :min-height="minHeight"
           elevation="12"
           style="opacity:0"
         >
-          <h1 class="text-center white--text hidden-md-and-down text-h4">下载软件</h1>
-          <h1 class="text-center white--text hidden-lg-and-up text-h5">下载软件</h1>
+          <h1 class="text-center white--text hidden-md-and-down text-h4">下 载 软 件</h1>
+          <h1 class="text-center white--text hidden-lg-and-up text-h5">下 载 软 件</h1>
           <transition name="first">
             <div v-if="initSuccess">
               <p class="white--text my-5">根据当前设备，推荐你选择{{winVersion}}/{{pcNum}}位版</p>
             </div>
           </transition>
+
           <transition name="first" v-if="winVersion=='win 7'">
             <div v-if="initSuccess">
-              <v-alert type="info">win7系统需先下载xxx</v-alert>
+              <v-alert type="error">win7系统需先下载依赖①和依赖②</v-alert>
             </div>
           </transition>
           <transition name="fade">
             <div v-if="initSuccess">
               <v-btn
                 v-if="isMobile"
-                min-height="60"
+                min-height="50"
                 color="blue darken-2"
                 class="white--text"
                 block
               >手机客户端将会在近期发布</v-btn>
               <v-btn
                 v-else-if="!isMac&&winVersion!='win 7'"
-                min-height="60"
+                min-height="50"
                 color="blue darken-2"
                 class="white--text"
                 block
               >
-                下载 {{winVersion}}/{{pcNum}}位版
+                <a :href="downloadHrefWin">下载 {{winVersion}}/{{pcNum}}位版</a>
                 <v-icon right color="white">mdi-cloud-download</v-icon>
               </v-btn>
-              <div v-else-if="!isMac&&winVersion=='win 7'" class="d-flex justify-space-around">
-                <v-btn min-height="60" color="blue darken-2" class="white--text">
-                  下载xxx
-                  <v-icon right color="white">mdi-cloud-download</v-icon>
-                </v-btn>
-                <v-btn min-height="60" color="blue darken-2" class="white--text">
-                  {{winVersion}}/{{pcNum}}位版
+
+              <div v-else-if="!isMac&&winVersion=='win 7'">
+                <div class="d-flex justify-space-around">
+                  <v-btn min-height="50" color="blue darken-2" class="white--text">
+                    <a
+                      href="http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
+                    >win7依赖①</a>
+                    <v-icon right color="white">mdi-cloud-download</v-icon>
+                  </v-btn>
+                  <v-btn min-height="50" color="blue darken-2" class="white--text">
+                    <a
+                      href="http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+                    >win7依赖②</a>
+                    <v-icon right color="white">mdi-cloud-download</v-icon>
+                  </v-btn>
+                </div>
+                <v-btn block min-height="50" color="blue darken-2" class="white--text mt-5">
+                  <a :href="downloadHrefWin">{{winVersion}}/{{pcNum}}位版</a>
                   <v-icon right color="white">mdi-cloud-download</v-icon>
                 </v-btn>
               </div>
               <v-btn v-else color="blue darken-2" class="white--text" block>
-                下载 mac 版
-                <v-icon right>mdi-cloud-download</v-icon>
+                <a :href="downloadHrefMac">下载 mac 版</a>
+              </v-btn>
+              <v-btn min-height="50" block color="blue darken-2 white--text mt-5">
+                <a href="http://openstore.daoshi.cloud/zhibola/zhibola%20Setup%201.4.0.exe">历史版本下载</a>
+                <v-icon right color="white">mdi-cloud-download</v-icon>
               </v-btn>
             </div>
           </transition>
+          <!-- 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 -->
+          <!-- 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 分割线 -->
           <transition name="fades">
             <div v-if="initSuccess">
               <v-btn
@@ -68,45 +84,61 @@
                 @click="checkVersion"
                 class="white--text mt-5"
                 block
-                min-height="60"
+                min-height="50"
               >
                 其他版本选择
                 <v-icon id="reverseIcon" color="white" right>mdi-chevron-down</v-icon>
               </v-btn>
             </div>
           </transition>
-           <v-btn
+          <v-btn
             id="exDownloadMac"
             color="blue darken-2"
             class="white--text mt-5"
             block
             height="0"
-            style="opacity:0"
+            style="opacity:0;display:none"
             v-if="!isMac"
           >
-            下载 mac 版
+            <a :href="downloadHrefMac">下载 mac 版</a>
             <v-icon right color="white">mdi-cloud-download</v-icon>
           </v-btn>
-          <div v-if="!isMac&&winVersion=='win 7'" class="d-flex justify-space-around">
-            <v-btn
-              id="exDownLoadWinBefore"
-              color="blue darken-2"
-              class="white--text mt-5"
-              height="0"
-              style="opacity:0"
-            >
-              下载 xxx
-              <v-icon right color="white">mdi-cloud-download</v-icon>
-            </v-btn>
+          <div v-if="!isMac&&winVersion=='win 7'">
+            <div class="d-flex justify-space-around">
+              <v-btn
+                id="exDownLoadWinBefore_one"
+                color="blue darken-2"
+                class="white--text mt-5"
+                height="0"
+                style="opacity:0;display:none"
+              >
+                <a href="http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu">win7依赖①</a>
+                <v-icon right color="white">mdi-cloud-download</v-icon>
+              </v-btn>
+              <v-btn
+                id="exDownLoadWinBefore_two"
+                color="blue darken-2"
+                class="white--text mt-5"
+                height="0"
+                style="opacity:0;display:none"
+              >
+                <a
+                  href="http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+                >win7依赖②</a>
+                <v-icon right color="white">mdi-cloud-download</v-icon>
+              </v-btn>
+            </div>
             <v-btn
               id="exDownloadWin"
               color="blue darken-2"
               class="white--text mt-5"
+              block
               height="0"
-              style="opacity:0"
+              style="opacity:0;display:none"
               v-if="pcNum"
             >
-              {{winVersion}}/32位版
+              <a :href="win32">{{winVersion}}/32位版</a>
+
               <v-icon right color="white">mdi-cloud-download</v-icon>
             </v-btn>
             <v-btn
@@ -114,10 +146,10 @@
               color="blue darken-2"
               class="white--text mt-5"
               height="0"
-              style="opacity:0"
+              style="opacity:0;display:none"
               v-else
             >
-              {{winVersion}}/64位版
+              <a :href="win64">{{winVersion}}/64位版</a>
               <v-icon right color="white">mdi-cloud-download</v-icon>
             </v-btn>
           </div>
@@ -127,11 +159,11 @@
               color="blue darken-2"
               class="white--text mt-5"
               height="0"
-              style="opacity:0"
+              style="opacity:0;display:none"
               block
               v-if="pcNum"
             >
-              {{winVersion}}/32位版
+              <a :href="win32">{{winVersion}}/32位版</a>
               <v-icon right color="white">mdi-cloud-download</v-icon>
             </v-btn>
             <v-btn
@@ -140,30 +172,31 @@
               class="white--text mt-5"
               height="0"
               block
-              style="opacity:0"
+              style="opacity:0;display:none"
               v-else
             >
-              {{winVersion}}/64位版
+              <a :href="win64">{{winVersion}}/64位版</a>
               <v-icon right color="white">mdi-cloud-download</v-icon>
             </v-btn>
             <div class="d-flex justify-space-around">
               <v-btn
                 height="0"
-                style="opacity:0"
+                style="opacity:0;display:none"
                 class="white--text mt-5"
                 color="blue darken-2"
                 id="Andriod"
+                disabled=""
               >下载手机版/安卓</v-btn>
               <v-btn
                 height="0"
-                style="opacity:0"
+                style="opacity:0;display:none"
                 class="white--text mt-5"
                 color="blue darken-2"
                 id="ios"
+                disabled=""
               >下载手机版/ios</v-btn>
             </div>
           </div>
-         
         </v-card>
       </div>
     </v-container>
@@ -186,7 +219,16 @@ export default {
       pcNum: 64,
       winVersion: "win 10",
       initSuccess: false,
-      isDownloadCard: false
+      isDownloadCard: false,
+      maxHeight: 550,
+      minHeight: 335,
+      win32:
+        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe",
+      win64:
+        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe",
+      downloadHrefWin: "",
+      downloadHrefMac:
+        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_mac.dmg"
     };
   },
   created() {
@@ -220,25 +262,35 @@ export default {
         gsap.to(document.querySelector("#reverseIcon"), {
           rotationX: 360
         });
-        gsap.to(document.querySelector("#exDownLoadWinBefore"), {
+        gsap.to(document.querySelector("#exDownLoadWinBefore_one"), {
           height: 0,
+          display: "none",
+          opacity: 0
+        });
+        gsap.to(document.querySelector("#exDownLoadWinBefore_two"), {
+          height: 0,
+          display: "none",
           opacity: 0
         });
         gsap.to(document.querySelector("#Andriod"), {
           height: 0,
+          display: "none",
           opacity: 0
         });
         gsap.to(document.querySelector("#ios"), {
           height: 0,
+          display: "none",
           opacity: 0
         });
         gsap.to(document.querySelector("#exDownloadWin"), {
           height: 0,
+          display: "none",
           opacity: 0
         });
         gsap.to(document.querySelector("#exDownloadMac"), {
           delay: 0.2,
           height: 0,
+          display: "none",
           opacity: 0,
           onComplete: () => {
             gsap.to(downloadCard, {
@@ -251,27 +303,37 @@ export default {
           rotationX: 180
         });
         gsap.to(downloadCard, {
-          height: 540,
+          height: this.maxHeight,
           duration: 0.3,
           onComplete: () => {
-            gsap.to(document.querySelector("#exDownLoadWinBefore"), {
-              height: 60,
+            gsap.to(document.querySelector("#exDownLoadWinBefore_one"), {
+              height: 50,
+              display: "block",
+              opacity: 1
+            });
+            gsap.to(document.querySelector("#exDownLoadWinBefore_two"), {
+              height: 50,
+              display: "block",
               opacity: 1
             });
             gsap.to(document.querySelector("#Andriod"), {
-              height: 60,
+              height: 50,
+              display: "block",
               opacity: 1
             });
             gsap.to(document.querySelector("#ios"), {
-              height: 60,
+              height: 50,
+              display: "block",
               opacity: 1
             });
             gsap.to(document.querySelector("#exDownloadWin"), {
-              height: 60,
+              height: 50,
+              display: "block",
               opacity: 1
             });
             gsap.to(document.querySelector("#exDownloadMac"), {
-              height: 60,
+              height: 50,
+              display: "block",
               delay: 0.1,
               opacity: 1
             });
@@ -304,6 +366,8 @@ export default {
       if (version.indexOf("Windows NT 5") != -1) {
         return "XP系统";
       } else if (version.indexOf("Windows NT 7") != -1) {
+        this.maxHeight = 690;
+        this.minHeight = 475;
         return "win 7";
       } else if (version.indexOf("Windows NT 8") != -1) {
         return "win 8";
@@ -315,9 +379,11 @@ export default {
       //判断windows系统位数 32/64
       let agent = navigator.userAgent.toLowerCase();
       if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
+        this.downloadHrefWin = this.win32;
         return 32;
       }
       if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
+        this.downloadHrefWin = this.win64;
         return 64;
       }
     },
@@ -346,4 +412,8 @@ export default {
 };
 </script>
 <style scoped>
+a {
+  text-decoration: none;
+  color: white;
+}
 </style>

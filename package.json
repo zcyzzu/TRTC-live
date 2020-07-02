@@ -1,23 +1,22 @@
 {
-  "name": "zhibola-web",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "export": "nuxt export",
-    "serve": "nuxt serve"
-  },
-  "dependencies": {
-    "@nuxtjs/axios": "^5.11.0",
-    "aos": "^3.0.0-beta.6",
-    "gsap": "^3.3.4",
-    "nuxt": "^2.13.0",
-    "vuetify": "^2.3.3",
-    "vuetify-loader": "^1.5.0"
-  },
-  "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.2"
-  }
+    "name": "zhibola-web",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "export": "nuxt export",
+        "serve": "nuxt serve"
+    },
+    "dependencies": {
+        "@nuxtjs/axios": "^5.11.0",
+        "gsap": "^3.3.4",
+        "nuxt": "^2.13.0",
+        "vuetify": "^2.3.3",
+        "vuetify-loader": "^1.5.0"
+    },
+    "devDependencies": {
+        "@nuxtjs/vuetify": "^1.11.2"
+    }
 }
