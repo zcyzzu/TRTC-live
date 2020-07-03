@@ -38,7 +38,7 @@ export default {
             },
             {
                 rel: 'stylesheet',
-                href: 'https://cdn.staticfile.org/MaterialDesign-Webfont/4.1.95/css/materialdesignicons.min.css'
+                href: 'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css'
             }
         ]
     },
@@ -105,5 +105,19 @@ export default {
      ** Build configuration
      ** See https://nuxtjs.org/api/configuration-build/
      */
-    build: {}
+    build: {
+        babel: {
+            sourceType: "unambiguous",
+        },
+        transpile: [
+            "vuetify",
+        ],
+        // transpile: [
+        //     /(.+)(nuxt-vuex-localstorage\/)(.+)(\.js)$/
+        // ],
+        /*
+         ** You can extend webpack config here
+         */
+        extend(config, ctx) {},
+    },
 }

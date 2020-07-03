@@ -16,6 +16,6 @@
 </template>
 <style scoped>
 .fonts {
-  font-family: KaiTi  !important;
+  font-family: SimHei  !important;
 }
 </style>
