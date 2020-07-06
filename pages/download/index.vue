@@ -63,7 +63,7 @@
                 <div class="d-flex justify-space-around">
                   <v-btn min-height="50" min-width="150" color="blue darken-2" class="white--text">
                     <a
-                      href="http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
+                      href="https://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
                       class="d-flex align-center"
                     >
                       <v-icon small>mdi-microsoft-windows</v-icon>依赖①下载
@@ -71,7 +71,7 @@
                   </v-btn>
                   <v-btn min-height="50" min-width="150" color="blue darken-2" class="white--text">
                     <a
-                      href="http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+                      href="https://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
                       class="d-flex align-center"
                     >
                       <v-icon small>mdi-microsoft-windows</v-icon>依赖②下载
@@ -133,7 +133,7 @@
                 style="opacity:0;display:none"
               >
                 <a
-                  href="http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
+                  href="https://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
                   class="d-flex align-center"
                 >
                   <v-icon small>mdi-microsoft-windows</v-icon>依赖①下载
@@ -148,7 +148,7 @@
                 style="opacity:0;display:none"
               >
                 <a
-                  href="http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+                  href="https://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
                   class="d-flex align-center"
                 >
                   <v-icon small>mdi-microsoft-windows</v-icon>依赖②下载
@@ -245,7 +245,7 @@
             style="opacity:0;display:none"
           >
             <a
-              href="http://openstore.daoshi.cloud/zhibola/zhibola%20Setup%201.4.0.exe"
+              href="https://openstore.daoshi.cloud/zhibola/zhibola%20Setup%201.4.0.exe"
               class="d-flex align-center"
             >
               <v-icon small>mdi-microsoft-windows</v-icon>Windows历史版本下载
@@ -299,12 +299,12 @@ export default {
       maxHeight: 550,
       minHeight: 350,
       win32:
-        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe",
+        "https://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe",
       win64:
-        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe",
+        "https://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe",
       downloadHrefWin: "",
       downloadHrefMac:
-        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_mac.dmg"
+        "https://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_mac.dmg"
     };
   },
   created() {
