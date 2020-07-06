@@ -218,7 +218,7 @@
               v-if="pcNum"
               :href="win32"
             >
-              <v-icon small>mdi-microsoft-windows</v-icon>32位版下载
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 32位下载
             </v-btn>
             <v-btn
               id="exDownloadWin"
@@ -230,7 +230,7 @@
               v-else
               :href="win64"
             >
-              <v-icon small>mdi-microsoft-windows</v-icon>64位版下载
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 64位下载
             </v-btn>
           </div>
           <v-btn
