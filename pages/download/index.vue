@@ -12,26 +12,26 @@
           elevation="12"
           style="opacity:0"
         >
-          <h1 class="text-center white--text hidden-md-and-down text-h4">下 载 软 件</h1>
-          <h1 class="text-center white--text hidden-lg-and-up text-h5">下 载 软 件</h1>
+          <h1 class="text-center white--text hidden-md-and-down text-h4">下载直播软件</h1>
+          <h1 class="text-center white--text hidden-lg-and-up text-h5">下载直播软件</h1>
           <transition name="first">
             <div v-if="initSuccess">
               <p class="white--text my-md-5 my-0 mt-5" v-if="isMobile">手机客户端将会在近期发布，敬请期待！</p>
               <p class="white--text my-5" v-else-if="!isMac">
                 根据当前设备，推荐你选择
                 <v-icon small color="white" style="position:relative;top:-1px">mdi-microsoft-windows</v-icon>
-                {{ pcNum }}位版
+                Windows {{ pcNum }}位版
               </p>
               <p class="white--text my-5" v-else>
                 根据当前设备，推荐你选择
-                <v-icon color="white" style="position:relative;top:-2px;left:-2px">mdi-apple</v-icon>版
+                <v-icon color="white" style="position:relative;top:-2px;left:-2px">mdi-apple</v-icon>MacOS版
               </p>
             </div>
           </transition>
           <transition name="first" v-if="winVersion == 'win 7'">
             <div v-if="initSuccess">
               <v-alert type="error">
-                <v-icon style="position:relative;top:-2px">mdi-microsoft-windows</v-icon>系统需先下载依赖①和依赖②
+                <v-icon style="position:relative;top:-2px">mdi-microsoft-windows</v-icon>Windows 7需先下载依赖①和依赖②
               </v-alert>
             </div>
           </transition>
@@ -40,55 +40,65 @@
             <div v-if="initSuccess">
               <div class="d-flex justify-space-around" v-if="isMobile">
                 <v-btn class="white--text mt-5" color="blue darken-2" min-width="150" height="50">
-                  <v-icon small>mdi-android</v-icon>手机版下载
+                  <v-icon small>mdi-android</v-icon>Android下载
                 </v-btn>
                 <v-btn class="white--text mt-5" color="blue darken-2" min-width="150" height="50">
-                  <v-icon small>mdi-apple</v-icon>手机版下载
+                  <v-icon small>mdi-apple</v-icon>iOS下载
                 </v-btn>
               </div>
               <v-btn
                 v-if="!isMac && winVersion != 'win 7'"
                 min-height="50"
                 color="blue darken-2"
-                class="white--text mt-5"
+                class="white--text mt-5 d-flex align-center"
+                :href="downloadHrefWin"
                 block
               >
-                <a :href="downloadHrefWin" class="d-flex align-center">
-                  <v-icon small>mdi-microsoft-windows</v-icon>
-                  {{ pcNum }}位版下载
-                </a>
+                <v-icon small>mdi-microsoft-windows</v-icon>
+                Windows {{ pcNum }}位下载
               </v-btn>
 
               <div v-else-if="!isMac && winVersion == 'win 7'">
                 <div class="d-flex justify-space-around">
-                  <v-btn min-height="50" min-width="150" color="blue darken-2" class="white--text">
-                    <a
-                      href="http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
-                      class="d-flex align-center"
-                    >
-                      <v-icon small>mdi-microsoft-windows</v-icon>依赖①下载
-                    </a>
+                  <v-btn
+                    min-height="50"
+                    href="https://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
+                    min-width="150"
+                    color="blue darken-2"
+                    class="white--text d-flex align-center"
+                  >
+                    <v-icon small>mdi-microsoft-windows</v-icon>依赖①下载
                   </v-btn>
-                  <v-btn min-height="50" min-width="150" color="blue darken-2" class="white--text">
-                    <a
-                      href="http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
-                      class="d-flex align-center"
-                    >
-                      <v-icon small>mdi-microsoft-windows</v-icon>依赖②下载
-                    </a>
+                  <v-btn
+                    href="https://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+                    min-height="50"
+                    min-width="150"
+                    color="blue darken-2"
+                    class="white--text d-flex align-center"
+                  >
+                    <v-icon small>mdi-microsoft-windows</v-icon>依赖②下载
                   </v-btn>
                 </div>
-                <v-btn block min-height="50" color="blue darken-2" class="white--text mt-5">
-                  <a :href="downloadHrefWin" class="d-flex align-center">
-                    <v-icon small>mdi-microsoft-windows</v-icon>
-                    {{ pcNum }}位版下载
-                  </a>
+                <v-btn
+                  block
+                  min-height="50"
+                  color="blue darken-2"
+                  class="white--text mt-5 d-flex align-center"
+                  :href="downloadHrefWin"
+                >
+                  <v-icon small>mdi-microsoft-windows</v-icon>
+                  Windows {{ pcNum }}位下载
                 </v-btn>
               </div>
-              <v-btn v-else min-height="50" color="blue darken-2" class="white--text" block>
-                <a :href="downloadHrefMac" class="d-flex align-center">
-                  <v-icon small>mdi-apple</v-icon>mac版下载
-                </a>
+              <v-btn
+                v-else
+                min-height="50"
+                color="blue darken-2"
+                class="white--text d-flex align-center"
+                :href="downloadHrefMac"
+                block
+              >
+                <v-icon small>mdi-apple</v-icon>MacOS下载
               </v-btn>
             </div>
           </transition>
@@ -98,41 +108,28 @@
               <v-btn
                 color="blue darken-2"
                 @click="checkVersion"
-                class="white--text mt-5"
+                class="white--text mt-5 d-flex align-center"
                 block
+                height="0"
                 min-height="50"
               >
-                其他版本选择
+                其他版本
                 <v-icon id="reverseIcon" color="white" right>mdi-chevron-down</v-icon>
               </v-btn>
             </div>
           </transition>
-          <v-btn
-            id="historyVersion"
-            block
-            color="blue darken-2 white--text mt-5"
-            height="0"
-            style="opacity:0;display:none"
-          >
-            <a
-              href="http://openstore.daoshi.cloud/zhibola/zhibola%20Setup%201.4.0.exe"
-              class="d-flex align-center"
-            >
-              <v-icon small>mdi-microsoft-windows</v-icon>历史版本下载
-            </a>
-          </v-btn>
+
           <v-btn
             id="exDownloadMac"
             color="blue darken-2"
-            class="white--text mt-5"
+            class="white--text mt-5 d-flex align-center"
             block
             height="0"
-            style="opacity:0;display:none"
+            style="opacity:0;display:none;"
             v-if="!isMac"
+            :href="downloadHrefMac"
           >
-            <a :href="downloadHrefMac" class="d-flex align-center">
-              <v-icon small>mdi-apple</v-icon>mac版下载
-            </a>
+            <v-icon small>mdi-apple</v-icon>MacOS下载
           </v-btn>
           <div v-if="!isMac && winVersion == 'win 7'">
             <!-- 如果是win7 系统 -->
@@ -140,58 +137,48 @@
               <v-btn
                 id="exDownLoadWinBefore_one"
                 color="blue darken-2"
-                class="white--text mt-5"
+                class="white--text mt-5 d-flex align-center"
                 height="0"
                 min-width="150"
                 style="opacity:0;display:none"
+                href="https://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
               >
-                <a
-                  href="http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
-                  class="d-flex align-center"
-                >
-                  <v-icon small>mdi-microsoft-windows</v-icon>依赖①下载
-                </a>
+                <v-icon small>mdi-microsoft-windows</v-icon>依赖①下载
               </v-btn>
               <v-btn
                 id="exDownLoadWinBefore_two"
                 color="blue darken-2"
-                class="white--text mt-5"
+                class="white--text mt-5 d-flex align-center"
                 height="0"
                 min-width="150"
                 style="opacity:0;display:none"
+                href="https://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
               >
-                <a
-                  href="http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
-                  class="d-flex align-center"
-                >
-                  <v-icon small>mdi-microsoft-windows</v-icon>依赖②下载
-                </a>
+                <v-icon small>mdi-microsoft-windows</v-icon>依赖②下载
               </v-btn>
             </div>
             <v-btn
               id="exDownloadWin"
               color="blue darken-2"
-              class="white--text mt-5"
+              class="white--text mt-5 d-flex align-center"
               block
               height="0"
               style="opacity:0;display:none"
               v-if="pcNum"
+              :href="win32"
             >
-              <a :href="win32" class="d-flex align-center">
-                <v-icon small>mdi-microsoft-windows</v-icon>32位版下载
-              </a>
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 32位下载
             </v-btn>
             <v-btn
               id="exDownloadWin"
               color="blue darken-2"
-              class="white--text mt-5"
+              class="white--text mt-5 d-flex align-center"
               height="0"
               style="opacity:0;display:none"
               v-else
+              :href="win64"
             >
-              <a :href="win64" class="d-flex align-center">
-                <v-icon small>mdi-microsoft-windows</v-icon>64位版下载
-              </a>
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 64位下载
             </v-btn>
           </div>
           <div v-else-if="isMac">
@@ -199,26 +186,24 @@
             <v-btn
               id="whileMac_32"
               color="blue darken-2"
-              class="white--text mt-5"
+              class="white--text mt-5 d-flex align-center"
               height="0"
               style="opacity:0;display:none"
               block
+              :href="win32"
             >
-              <a :href="win32" class="d-flex align-center">
-                <v-icon small>mdi-microsoft-windows</v-icon>32位版下载
-              </a>
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 32位下载
             </v-btn>
             <v-btn
               id="whileMac_64"
               color="blue darken-2"
-              class="white--text mt-5"
+              class="white--text mt-5 d-flex align-center"
               height="0"
               block
               style="opacity:0;display:none"
+              :href="win64"
             >
-              <a :href="win64" class="d-flex align-center">
-                <v-icon small>mdi-microsoft-windows</v-icon>64位版下载
-              </a>
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 64位下载
             </v-btn>
           </div>
           <div v-else>
@@ -226,50 +211,59 @@
             <v-btn
               id="exDownloadWin"
               color="blue darken-2"
-              class="white--text mt-5"
+              class="white--text mt-5 d-flex align-center"
               height="0"
-              style="opacity:0;display:none"
+              style="opacity:0;display:none;"
               block
               v-if="pcNum"
+              :href="win32"
             >
-              <a :href="win32" class="d-flex align-center">
-                <v-icon small>mdi-microsoft-windows</v-icon>32位版下载
-              </a>
+              <v-icon id="icons" small>mdi-microsoft-windows</v-icon>Windows 32位下载
             </v-btn>
             <v-btn
               id="exDownloadWin"
               color="blue darken-2"
-              class="white--text mt-5"
+              class="white--text mt-5 d-flex align-center"
               height="0"
               block
               style="opacity:0;display:none"
               v-else
+              :href="win64"
             >
-              <a :href="win64" class="d-flex align-center">
-                <v-icon small>mdi-microsoft-windows</v-icon>64位版下载
-              </a>
+              <v-icon small>mdi-microsoft-windows</v-icon>Windows 64位下载
             </v-btn>
           </div>
+          <v-btn
+            id="historyVersion"
+            class="d-flex align-center"
+            block
+            color="blue darken-2 white--text mt-5"
+            height="0"
+            style="opacity:0;display:none"
+            href="https://openstore.daoshi.cloud/zhibola/zhibola%20Setup%201.4.0.exe"
+          >
+            <v-icon small>mdi-microsoft-windows</v-icon>Windows历史版本下载
+          </v-btn>
           <div class="d-flex justify-space-around" v-if="!isMobile">
             <v-btn
               height="0"
-              style="opacity:0;display:none"
-              class="white--text mt-5"
+              style="opacity:0;display:none;text-transform:none"
+              class="white--text mt-5 d-flex align-center"
               color="blue darken-2"
               id="Andriod"
               min-width="150"
             >
-              <v-icon small>mdi-android</v-icon>手机版下载
+              <v-icon small>mdi-android</v-icon>Android下载
             </v-btn>
             <v-btn
               height="0"
-              style="opacity:0;display:none"
-              class="white--text mt-5"
+              style="opacity:0;display:none;text-transform:none"
+              class="white--text mt-5 d-flex align-center"
               color="blue darken-2"
               id="ios"
               min-width="150"
             >
-              <v-icon small>mdi-apple</v-icon>手机版下载
+              <v-icon small>mdi-apple</v-icon>iOS下载
             </v-btn>
           </div>
         </v-card>
@@ -298,12 +292,12 @@ export default {
       maxHeight: 550,
       minHeight: 350,
       win32:
-        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe",
+        "https://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe",
       win64:
-        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe",
+        "https://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe",
       downloadHrefWin: "",
       downloadHrefMac:
-        "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_mac.dmg"
+        "https://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_mac.dmg"
     };
   },
   created() {
@@ -338,6 +332,27 @@ export default {
         x: 0,
         opacity: 1,
         duration: 0.7
+      }
+    );
+    gsap.to(downloadCard, {
+      height: 0
+    });
+    gsap.to(
+      [
+        "#exDownLoadWinBefore_one",
+        "#exDownLoadWinBefore_two",
+        "#whileMac_32",
+        "#whileMac_64",
+        "#Andriod",
+        "#ios",
+        "#exDownloadWin",
+        "#historyVersion",
+        "#exDownloadMac"
+      ],
+      {
+        height: 0,
+        display: "none",
+        opacity: 0
       }
     );
   },
@@ -419,5 +434,6 @@ export default {
 a {
   text-decoration: none;
   color: white;
+  text-transform: none;
 }
 </style>

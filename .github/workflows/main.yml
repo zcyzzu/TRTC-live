@@ -1,0 +1,19 @@
+name: deploy-to-aliyun
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: login to Aliyun
+        env:
+          PASS: ${{secrets.ALI_REGISTRY_PASSWORD}}
+        run: docker login -u francissmajere@qq.com -p $PASS registry.cn-hongkong.aliyuncs.com
+      - run: docker build -t registry.cn-hongkong.aliyuncs.com/daoshi-cloud/zhibola-nuxt:0.0.1 .
+      - run: docker push registry.cn-hongkong.aliyuncs.com/daoshi-cloud/zhibola-nuxt:0.0.1
