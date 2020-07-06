@@ -125,7 +125,7 @@
             class="white--text mt-5 d-flex align-center"
             block
             height="0"
-            style="opacity:0;display:none"
+            style="opacity:0;display:none;"
             v-if="!isMac"
             :href="downloadHrefMac"
           >
@@ -213,12 +213,12 @@
               color="blue darken-2"
               class="white--text mt-5 d-flex align-center"
               height="0"
-              style="opacity:0;display:none"
+              style="opacity:0;display:none;"
               block
               v-if="pcNum"
               :href="win32"
             >
-              <v-icon small>mdi-microsoft-windows</v-icon>Windows 32位下载
+              <v-icon id="icons" small>mdi-microsoft-windows</v-icon>Windows 32位下载
             </v-btn>
             <v-btn
               id="exDownloadWin"
@@ -332,6 +332,27 @@ export default {
         x: 0,
         opacity: 1,
         duration: 0.7
+      }
+    );
+    gsap.to(downloadCard, {
+      height: 0
+    });
+    gsap.to(
+      [
+        "#exDownLoadWinBefore_one",
+        "#exDownLoadWinBefore_two",
+        "#whileMac_32",
+        "#whileMac_64",
+        "#Andriod",
+        "#ios",
+        "#exDownloadWin",
+        "#historyVersion",
+        "#exDownloadMac"
+      ],
+      {
+        height: 0,
+        display: "none",
+        opacity: 0
       }
     );
   },
