@@ -12,8 +12,8 @@
           elevation="12"
           style="opacity:0"
         >
-          <h1 class="text-center white--text hidden-md-and-down text-h4">下 载 软 件</h1>
-          <h1 class="text-center white--text hidden-lg-and-up text-h5">下 载 软 件</h1>
+          <h1 class="text-center white--text hidden-md-and-down text-h4">下载直播软件</h1>
+          <h1 class="text-center white--text hidden-lg-and-up text-h5">下载直播软件</h1>
           <transition name="first">
             <div v-if="initSuccess">
               <p class="white--text my-md-5 my-0 mt-5" v-if="isMobile">手机客户端将会在近期发布，敬请期待！</p>
@@ -102,7 +102,7 @@
                 block
                 min-height="50"
               >
-                其他版本选择
+                其他版本
                 <v-icon id="reverseIcon" color="white" right>mdi-chevron-down</v-icon>
               </v-btn>
             </div>
@@ -254,23 +254,23 @@
           <div class="d-flex justify-space-around" v-if="!isMobile">
             <v-btn
               height="0"
-              style="opacity:0;display:none"
+              style="opacity:0;display:none;text-transform:none"
               class="white--text mt-5"
               color="blue darken-2"
               id="Andriod"
               min-width="150"
             >
-              <v-icon small>mdi-android</v-icon>手机版下载
+              <v-icon small>mdi-android</v-icon>Android下载
             </v-btn>
             <v-btn
               height="0"
-              style="opacity:0;display:none"
+              style="opacity:0;display:none;text-transform:none"
               class="white--text mt-5"
               color="blue darken-2"
               id="ios"
               min-width="150"
             >
-              <v-icon small>mdi-apple</v-icon>手机版下载
+              <v-icon small>mdi-apple</v-icon>iOS下载
             </v-btn>
           </div>
         </v-card>
