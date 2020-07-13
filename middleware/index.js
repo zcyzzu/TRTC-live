@@ -1,4 +1,4 @@
-export const readUserAgent = function() {
+export default function({ store }) {
     let flag = true;
     let userAgentInfo = navigator.userAgent;
     let mobileSystem = ""; {
@@ -24,7 +24,7 @@ export const readUserAgent = function() {
     let winVersion = "";
     let maxHeight = null;
     let minHeight = null;
-    let downloadHrefWin = ""
+    let downloadHrefWin = "";
     let pcNum = Number; {
         //判断系统win/mac
         isMac = (function() {
@@ -50,17 +50,19 @@ export const readUserAgent = function() {
             //判断windows系统位数 32/64
             let agent = userAgentInfo.toLowerCase();
             if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe"
-                pcNum = 32
+                downloadHrefWin =
+                    "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe";
+                pcNum = 32;
             }
             if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe"
-                pcNum = 64
+                downloadHrefWin =
+                    "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe";
+                pcNum = 64;
             }
         }
     }
     // 分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线
-    return {
+    store.commit("userAgents/setUserAgentInfo", {
         flag: flag, //false,说明是手机端
         mobileSystem: mobileSystem, //手机系统 可以判断手机类型
         isMac: isMac,
@@ -70,16 +72,5 @@ export const readUserAgent = function() {
         minHeight: minHeight,
         downloadHrefWin: downloadHrefWin,
         pcNum: pcNum
-    };
-    return {
-        flag: false, //false,说明是手机端
-        mobileSystem: mobileSystem, //手机系统 可以判断手机类型
-        isMac: false,
-        isWindows: isWindows,
-        winVersion: 'mac',
-        maxHeight: maxHeight,
-        minHeight: minHeight,
-        downloadHrefWin: downloadHrefWin,
-        pcNum: 64
-    };
-};
+    });
+}

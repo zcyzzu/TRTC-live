@@ -1,30 +1,37 @@
 <template>
-  <div>
-    <v-btn
-      :color="color"
-      class="white--text mt-5"
-      height="0"
-      style="opacity:0;display:none"
-      block
-    >
-      <a :href="hrefs">{{text}}</a>
-    </v-btn>
-  </div>
+  <v-btn
+    max-height="60"
+    min-height="50"
+    color="blue darken-2"
+    class="white--text mt-3"
+    :block="btnInfo.block"
+    :href="btnInfo.href"
+    min-width="175"
+  >
+    <v-icon small>{{btnInfo.icon}}</v-icon>
+    <span>{{btnInfo.downloadInfo}}</span>
+  </v-btn>
 </template>
 <script>
 export default {
   props: {
-    text: {
-      type: String,
-      default: "这是按钮内容"
-    },
-    hrefs: {
-      type: String,
-      default: null
-    },
-    color:{
+    btnInfo: {
+      href: {
         type: String,
-        default: 'blue darken-2',
+        default: ""
+      },
+      downloadInfo: {
+        type: String,
+        default: "Mac版下载"
+      },
+      icon: {
+        type: String,
+        default: "mdi-apple"
+      },
+      block: {
+        type: Boolean,
+        default: false
+      }
     }
   }
 };

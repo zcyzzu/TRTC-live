@@ -35,7 +35,6 @@
               </v-alert>
             </div>
           </transition>
-
           <transition name="fade">
             <div v-if="initSuccess">
               <div class="d-flex justify-space-around" v-if="isMobile">
@@ -430,10 +429,4 @@ export default {
   }
 };
 </script>
-<style scoped>
-a {
-  text-decoration: none;
-  color: white;
-  text-transform: none;
-}
-</style>
+

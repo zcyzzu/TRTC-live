@@ -27,3 +27,12 @@
 .fades-leave-to {
     opacity: 0;
 }
+
+.zIndex {
+    position: relative;
+    z-index: 1;
+}
+
+* {
+    text-transform: none;
+}
