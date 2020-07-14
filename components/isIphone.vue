@@ -45,10 +45,11 @@ export default {
       href: ""
     };
     this.ceshi5 = {
-      downloadInfo: "Windows历史版本",
+      downloadInfo: "历史版本下载",
       block: true,
-      icon: "mdi-microsoft-windows",
-      href: ""
+      icon: "",
+      href: "",
+      rightArray:'mdi-chevron-right'
     };
   }
 };

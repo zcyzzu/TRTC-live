@@ -11,30 +11,40 @@
       更多版本下载
       <v-icon id="reverseIcon" color="white" right>mdi-chevron-down</v-icon>
     </v-btn>
-    <div v-if="info.isWindows&&info.winVersion!='win 7'">
-      <notWin7 :info="info"></notWin7>
-    </div>
-    <div v-else-if="info.isWindows&&info.isMac">
-      <isMac :info="info"></isMac>
-    </div>
-    <div v-else-if="info.isWindows&&info.winVersion=='win 7'">
-      <isWin7 :info="info"></isWin7>
-    </div>
-    <div v-else-if="(!info.flag)&&info.mobileSystem=='iPhone'">
-      <isIphone :info="info"></isIphone>
-    </div>
-    <div v-else>
-      <isAndroid :info="info"></isAndroid>
-    </div>
+    <transition name="zcy">
+      <div v-if="isShow">
+        <div v-if="info.isWindows&&info.winVersion!='win 7'">
+          <!-- win10/win8 -->
+          <notWin7 :info="info" @historyVersion="historyVersion"></notWin7>
+        </div>
+        <div v-else-if="info.isWindows==false&&info.isMac">
+          <!-- mac -->
+          <isMac :info="info"></isMac>
+        </div>
+        <div v-else-if="info.isWindows&&info.winVersion=='win 7'">
+          <!-- win7 -->
+          <isWin7 :info="info"></isWin7>
+        </div>
+        <div v-else-if="(!info.flag)&&info.mobileSystem=='iPhone'">
+          <!-- ios -->
+          <isIphone :info="info"></isIphone>
+        </div>
+        <div v-else>
+          <!-- android -->
+          <isAndroid :info="info"></isAndroid>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
-import { moreVersion } from "~/config/gsap";
-import { setBtn } from "~/config/setBtn";
-import btn from "~/components/base/btn";
-import notWin7 from "~/components/notWin7";
+import gsap from "gsap";
 import isMac from "~/components/isMac";
+import btn from "~/components/base/btn";
+import { setBtn } from "~/config/setBtn";
 import isWin7 from "~/components/isWin7";
+import notWin7 from "~/components/notWin7";
+import { moreVersion } from "~/config/gsap";
 import isIphone from "~/components/isIphone";
 import isAndroid from "~/components/isAndroid";
 export default {
@@ -49,7 +59,8 @@ export default {
   props: ["info"],
   data() {
     return {
-      isReverseIcon: true
+      isReverseIcon: true,
+      isShow: false
     };
   },
 
@@ -57,6 +68,10 @@ export default {
     checkVersion() {
       this.isReverseIcon = !this.isReverseIcon;
       moreVersion(document.querySelector("#reverseIcon"), this.isReverseIcon);
+      this.isShow=!this.isShow
+    },
+    historyVersion(){
+      this.$emit('historyVersion')
     }
   }
 };

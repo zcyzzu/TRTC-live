@@ -27,8 +27,8 @@
   </div>
 </template>
 <script>
-import btn from "~/components/base/btn";
 import gsap from "gsap";
+import btn from "~/components/base/btn";
 export default {
   components: {
     btn
@@ -56,7 +56,7 @@ export default {
       if (this.isheight) {
         gsap.to("#card", {
           minHeight: 500,
-          onComplete: () => {
+          onStart: () => {
             gsap.to(".zcy", {
               display: "block",
               duration: 0.5,

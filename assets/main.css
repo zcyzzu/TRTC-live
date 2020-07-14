@@ -36,3 +36,13 @@
 * {
     text-transform: none;
 }
+
+.zcy-enter-active,
+.zcy-leave-active {
+    transition: opacity 0.1s;
+}
+
+.zcy-enter,
+.zcy-leave-to {
+    opacity: 0;
+}

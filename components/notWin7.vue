@@ -2,7 +2,7 @@
   <div>
     <btn :btnInfo="ceshi1"></btn>
     <btn :btnInfo="ceshi2"></btn>
-    <btn :btnInfo="ceshi5"></btn>
+    <btn :btnInfo="ceshi5" @historyVersion="historyVersion" ref="historyVersion"></btn>
     <div class="d-flex justify-space-between">
       <btn :btnInfo="ceshi3"></btn>
       <btn :btnInfo="ceshi4"></btn>
@@ -42,11 +42,17 @@ export default {
       href: ""
     };
      this.ceshi5 = {
-      downloadInfo: "其他版本下载",
+      downloadInfo: "历史版本下载",
       block: true,
-      icon: "mdi-microsoft-windows",
-      href: ""
+      icon: "",
+      href: "",
+      rightArray:'mdi-chevron-right'
     };
-  }
+  },
+  methods: {
+    historyVersion(){
+      this.$emit('historyVersion')
+    }
+  },
 };
 </script>

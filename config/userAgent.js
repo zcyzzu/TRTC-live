@@ -72,11 +72,11 @@ export const readUserAgent = function() {
         pcNum: pcNum
     };
     return {
-        flag: false, //false,说明是手机端
+        flag: true, //false,说明是手机端
         mobileSystem: mobileSystem, //手机系统 可以判断手机类型
-        isMac: false,
-        isWindows: isWindows,
-        winVersion: 'mac',
+        isMac: true,
+        isWindows: false,
+        winVersion: '',
         maxHeight: maxHeight,
         minHeight: minHeight,
         downloadHrefWin: downloadHrefWin,

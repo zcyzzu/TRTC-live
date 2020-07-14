@@ -1,16 +1,27 @@
 <template>
-  <v-btn
-    max-height="60"
-    min-height="50"
-    color="blue darken-2"
-    class="white--text mt-3"
-    :block="btnInfo.block"
-    :href="btnInfo.href"
-    min-width="175"
-  >
-    <v-icon small>{{btnInfo.icon}}</v-icon>
-    <span>{{btnInfo.downloadInfo}}</span>
-  </v-btn>
+  <div>
+    <v-btn
+      max-height="60"
+      min-height="50"
+      max-width="350"
+      color="blue darken-2"
+      class="white--text mt-3"
+      :block="btnInfo.block"
+      :href="btnInfo.href"
+      min-width="170"
+      @click="dialogs"
+    >
+      <v-icon small>{{btnInfo.icon}}</v-icon>
+      <span>{{btnInfo.downloadInfo}}</span>
+      <v-icon small>{{btnInfo.rightArray}}</v-icon>
+    </v-btn>
+    <v-dialog v-model="dialog" max-width="400">
+      <v-card>
+        <v-card-title>提示信息</v-card-title>
+        <v-card-text>手机版会在近期推出，敬请期待!</v-card-text>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 <script>
 export default {
@@ -31,6 +42,29 @@ export default {
       block: {
         type: Boolean,
         default: false
+      },
+      rightArray:{
+        type:String,
+        default:''
+      }
+    }
+  },
+  data() {
+    return {
+      dialog: false
+    };
+  },
+  methods: {
+    dialogs() {
+      if (
+        this.btnInfo.downloadInfo == "ios版" ||
+        this.btnInfo.downloadInfo == "IOS"
+      ) {
+        this.dialog = true;
+      } else if (this.btnInfo.downloadInfo == "Android") {
+        this.dialog = true;
+      }else if(this.btnInfo.downloadInfo == "历史版本下载"){
+        this.$emit('historyVersion')
       }
     }
   }

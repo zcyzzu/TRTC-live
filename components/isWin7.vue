@@ -42,10 +42,11 @@ export default {
       href: ""
     };
     this.ceshi5 = {
-      downloadInfo: "其他版本下载",
+      downloadInfo: "历史版本下载",
       block: true,
-      icon: "mdi-microsoft-windows",
-      href: ""
+      icon: "",
+      href: "",
+      rightArray:'mdi-chevron-right'
     };
   }
 };
