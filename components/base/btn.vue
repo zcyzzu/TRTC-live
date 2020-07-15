@@ -5,7 +5,7 @@
       min-height="50"
       max-width="350"
       color="blue darken-2"
-      class="white--text mt-3"
+      class="white--text mb-3"
       :style="{marginLeft:btnInfo.ml+'px'}"
       :block="btnInfo.block"
       :href="btnInfo.href"

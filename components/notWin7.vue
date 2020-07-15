@@ -33,28 +33,27 @@ export default {
       downloadInfo: "Android",
       block: false,
       icon: "mdi-android",
-      href: "",
-
+      href: ""
     };
     this.ceshi4 = {
       downloadInfo: "IOS",
       block: false,
       icon: "mdi-apple",
       href: "",
-      ml:4
+      ml: 4
     };
-     this.ceshi5 = {
+    this.ceshi5 = {
       downloadInfo: "历史版本下载",
       block: true,
       icon: "",
       href: "",
-      rightArray:'mdi-chevron-right'
+      rightArray: "mdi-chevron-right"
     };
   },
   methods: {
-    historyVersion(){
-      this.$emit('historyVersion')
+    historyVersion() {
+      this.$emit("historyVersion");
     }
-  },
+  }
 };
 </script>

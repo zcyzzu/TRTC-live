@@ -23,7 +23,7 @@ export const rightBottom = function(ele) {
         }
     );
 };
-export const moreVersion = function(ele, bool) {
+export const moreVersions = function(ele, bool) {
     if (bool) {
         gsap.to(ele, {
             rotationX: 360,

@@ -73,7 +73,7 @@ export const readUserAgent = function() {
     };
     return {
         flag: false, //false,说明是手机端
-        mobileSystem: 'Android', //手机系统 可以判断手机类型
+        mobileSystem: 'iPhone', //手机系统 可以判断手机类型
         isMac: false,
         isWindows: false,
         winVersion: '',

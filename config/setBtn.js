@@ -23,14 +23,14 @@ export const setBtn = function(ele) {
             //mac电脑
             infos.downloadInfo = "MacOS";
             infos.icon = "mdi-apple";
-            infos.href = "";
+            infos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg";
             //windows
             moreinfos.downloadInfo = 'Windows' + " " + 64;
             moreinfos.icon = "mdi-microsoft-windows";
-            moreinfos.href = "";
+            moreinfos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe";
             otherSystem.downloadInfo = 'Windows' + " " + 32
             otherSystem.icon = "mdi-microsoft-windows";
-            otherSystem.href = "";
+            otherSystem.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe";
 
         } else {
             //windows电脑
@@ -38,24 +38,24 @@ export const setBtn = function(ele) {
                 //win 7 系统
                 infos.downloadInfo = ele.winVersion + " " + ele.pcNum;
                 infos.icon = "mdi-microsoft-windows";
-                infos.href = "";
+                infos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe";
                 ele.pcNum == 64 ? moreinfos.downloadInfo = ele.winVersion + " " + 32 : moreinfos.downloadInfo = ele.winVersion + " " + 64
                 moreinfos.icon = "mdi-microsoft-windows";
-                moreinfos.href = "";
+                moreinfos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe";
                 otherSystem.downloadInfo = "MacOS";
                 otherSystem.icon = "mdi-apple";
-                otherSystem.href = "";
+                otherSystem.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg";
             } else {
                 //其他系统
                 infos.downloadInfo = ele.winVersion + " " + ele.pcNum;
                 infos.icon = "mdi-microsoft-windows";
-                infos.href = "";
+                infos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe";
                 ele.pcNum == 64 ? moreinfos.downloadInfo = ele.winVersion + " " + 32 : moreinfos.downloadInfo = ele.winVersion + " " + 64
                 moreinfos.icon = "mdi-microsoft-windows";
-                moreinfos.href = "";
+                moreinfos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe";
                 otherSystem.downloadInfo = "MacOS";
                 otherSystem.icon = "mdi-apple";
-                otherSystem.href = "";
+                otherSystem.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg";
             }
         }
     } else {

@@ -30,19 +30,19 @@ export default {
       downloadInfo: "MacOS",
       block: true,
       icon: "mdi-apple",
-      href: ""
+      href: "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg"
     };
     this.ceshi3 = {
       downloadInfo: "Windows 64位",
       block: true,
       icon: "mdi-microsoft-windows",
-      href: ""
+      href: "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
     };
     this.ceshi4 = {
       downloadInfo: "Windows 32位",
       block: true,
       icon: "mdi-microsoft-windows",
-      href: ""
+      href: "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
     };
     this.ceshi5 = {
       downloadInfo: "历史版本下载",
