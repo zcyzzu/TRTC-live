@@ -17,21 +17,21 @@
           <!-- win10/win8 -->
           <notWin7 :info="info" @historyVersion="historyVersion"></notWin7>
         </div>
-        <div v-else-if="info.isWindows==false&&info.isMac">
+        <div v-else-if="info.isWindows==false&&info.isMac&&info.flag">
           <!-- mac -->
-          <isMac :info="info"></isMac>
+          <isMac :info="info" @historyVersion="historyVersion"></isMac>
         </div>
         <div v-else-if="info.isWindows&&info.winVersion=='win 7'">
           <!-- win7 -->
-          <isWin7 :info="info"></isWin7>
+          <isWin7 :info="info" @historyVersion="historyVersion"></isWin7>
         </div>
-        <div v-else-if="(!info.flag)&&info.mobileSystem=='iPhone'">
+        <div v-if="info.flag==false&&info.mobileSystem=='iPhone'">
           <!-- ios -->
-          <isIphone :info="info"></isIphone>
+          <isIphone :info="info" @historyVersion="historyVersion"></isIphone>
         </div>
-        <div v-else>
+        <div v-else-if="info.flag==false&&info.mobileSystem=='Android'">
           <!-- android -->
-          <isAndroid :info="info"></isAndroid>
+          <isAndroid :info="info" @historyVersion="historyVersion"></isAndroid>
         </div>
       </div>
     </transition>

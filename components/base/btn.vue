@@ -6,6 +6,7 @@
       max-width="350"
       color="blue darken-2"
       class="white--text mt-3"
+      :style="{marginLeft:btnInfo.ml+'px'}"
       :block="btnInfo.block"
       :href="btnInfo.href"
       min-width="170"
@@ -46,6 +47,10 @@ export default {
       rightArray:{
         type:String,
         default:''
+      },
+      ml:{
+        type:Number,
+        default:0
       }
     }
   },

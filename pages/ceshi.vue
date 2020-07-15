@@ -1,54 +1,46 @@
 <template>
   <div class="zIndex">
     <pageBar></pageBar>
-    <div style="height:90vh" class="d-flex flex-column justify-center">
-      <v-card
-        v-if="historyVersions"
-        min-width="390"
-        min-height="340"
-        id="downloadCard"
-        class="mx-auto rounded-xl pa-md-5 pa-5 d-flex flex-column justify-center"
-        color="#3f51a5"
-        elevation="12"
-        style="opacity:0"
-      >
-        <h1 class="text-center white--text hidden-md-and-down text-h4">下载直播软件</h1>
-        <h1 class="text-center white--text hidden-lg-and-up text-h5">下载直播软件</h1>
-        <recommend :info="userAgentInfo"></recommend>
-        <div v-if="userAgentInfo.winVersion=='win 7'">
-          <isWin7></isWin7>
-          <div class="d-flex justify-space-between">
-            <btn :btnInfo="moduleOne"></btn>
-            <btn :btnInfo="moduleTwo"></btn>
+    <div style="min-height:90vh" class="d-flex align-center justify-center">
+      <div class="d-flex justify-center">
+        <v-card
+          width="400"
+          min-height="340"
+          id="downloadCard"
+          class="rounded-xl pa-md-5 pa-5"
+          color="#3f51a5"
+          elevation="12"
+          style="opacity:0"
+        >
+          <div class="d-flex flex-column justify-center" style="height:100%">
+            <h1 class="text-center white--text  text-md-h4 text-h5">下载直播软件</h1>
+            <recommend :info="userAgentInfo"></recommend>
+            <div v-if="userAgentInfo.winVersion=='win 7'">
+              <isWin7></isWin7>
+              <div class="d-flex justify-space-between">
+                <btn :btnInfo="moduleOne"></btn>
+                <btn :btnInfo="moduleTwo"></btn>
+              </div>
+            </div>
+            <btn :btnInfo="download"></btn>
+            <moreVersion @historyVersion="historyVersion" :info="userAgentInfo" ref="moreVersion"></moreVersion>
           </div>
-        </div>
-        <btn :btnInfo="download"></btn>
-        <moreVersion @historyVersion="historyVersion" :info="userAgentInfo" ref="moreVersion"></moreVersion>
-      </v-card>
-      <v-card
-        v-else
-        min-width="390"
-        min-height="340"
-        id="downloadCards"
-        class="mx-auto rounded-xl pa-md-5 pa-5 d-flex flex-column justify-center"
-        color="#3f51a5"
-        elevation="12"
-        style="opacity:1"
-      >
-        <v-btn @click="historyVersion">返回</v-btn>
-      </v-card>
+        </v-card>
+        <historyVersion :info="userAgentInfo" ></historyVersion>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import btn from "~/components/base/btn";
 import gsap from "gsap";
-import { downloadCard } from "~/config/gsap";
-import isWin7 from "~/components/base/isWin7";
+import btn from "~/components/base/btn";
+import { downloadCard, historyVersions } from "~/config/gsap";
+import isWin7 from "~/components/base/isWindows7";
 import { readUserAgent } from "~/config/userAgent";
 import { setBtn } from "~/config/setBtn";
 import pageBar from "~/components/download/pageBar";
 import moreVersion from "~/components/moreVersion";
+import historyVersion from "~/components/historyVersion/historyVersion";
 import recommend from "~/components/base/recommend";
 export default {
   layout: "background",
@@ -56,13 +48,12 @@ export default {
     pageBar,
     isWin7,
     btn,
-    moreVersion
+    moreVersion,
+    historyVersion
   },
   data() {
     return {
-      historyVersions: true,
       userAgentInfo: Object,
-      info: Object,
       moduleOne: {
         downloadInfo: "依赖①"
       },
@@ -86,31 +77,10 @@ export default {
   },
   methods: {
     historyVersion() {
-      console.log(this.historyVersions)
-      if (this.historyVersions) {
-        gsap.to("#downloadCard", {
-          duration: 1,
-          scale: 0,
-          onComplete: () => {
-            gsap.to("#downloadCards", {
-              scale: 1,
-              duration: 1
-            });
-          }
-        });
-      } else {
-        gsap.to("#downloadCards", {
-          duration: 1,
-          scale: 0,
-          onComplete: () => {
-            gsap.to("#downloadCard", {
-              scale: 1,
-              duration: 1
-            });
-          }
-        });
-      }
-      this.historyVersions = !this.historyVersions;
+      historyVersions(
+        document.querySelector("#downloadCard"),
+        document.querySelector("#ceshiCard")
+      );
     }
   }
 };

@@ -4,7 +4,7 @@
     <btn :btnInfo="ceshi2"></btn>
     <btn :btnInfo="ceshi3"></btn>
     <btn :btnInfo="ceshi4"></btn>
-    <btn :btnInfo="ceshi5"></btn>
+    <btn :btnInfo="ceshi5" @historyVersion="historyVersion"></btn>
   </div>
 </template>
 <script>
@@ -51,7 +51,11 @@ export default {
       href: "",
       rightArray:'mdi-chevron-right'
     };
-   
-  }
+  },
+  methods: {
+    historyVersion(){
+      this.$emit('historyVersion')
+    }
+  },
 };
 </script>

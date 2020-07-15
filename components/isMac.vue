@@ -2,6 +2,7 @@
   <div>
     <btn :btnInfo="ceshi1"></btn>
     <btn :btnInfo="ceshi2"></btn>
+    <btn :btnInfo="ceshi5" @historyVersion="historyVersion"></btn>
     <div class="d-flex justify-space-between">
       <btn :btnInfo="ceshi3"></btn>
       <btn :btnInfo="ceshi4"></btn>
@@ -21,7 +22,8 @@ export default {
       ceshi1: {},
       ceshi2: {},
       ceshi3: {},
-      ceshi4: {}
+      ceshi4: {},
+      ceshi5: {}
     };
   },
   mounted() {
@@ -37,8 +39,21 @@ export default {
       downloadInfo: "IOS",
       block: false,
       icon: "mdi-apple",
-      href: ""
+      href: "",
+      ml: 4
     };
-  }
+    this.ceshi5 = {
+      downloadInfo: "历史版本下载",
+      block: true,
+      icon: "",
+      href: "",
+      rightArray: "mdi-chevron-right"
+    };
+  },
+   methods: {
+    historyVersion(){
+      this.$emit('historyVersion')
+    }
+  },
 };
 </script>
