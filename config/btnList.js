@@ -1,5 +1,5 @@
 import { setBtn } from "./setBtn";
-export const btnList = function(ele, system) {
+export const btnList = function (ele, system) {
     let btnList = {
         desktop: {},
         mobile: {
