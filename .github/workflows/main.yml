@@ -15,5 +15,5 @@ jobs:
         env:
           PASS: ${{secrets.ALI_REGISTRY_PASSWORD}}
         run: docker login -u francissmajere@qq.com -p $PASS registry.cn-hongkong.aliyuncs.com
-      - run: docker build -t registry.cn-hongkong.aliyuncs.com/daoshi-cloud/zhibola-nuxt:0.0.1 .
-      - run: docker push registry.cn-hongkong.aliyuncs.com/daoshi-cloud/zhibola-nuxt:0.0.1
+      - run: docker build -t registry.cn-hongkong.aliyuncs.com/daoshi-cloud/zhibola-nuxt:1.0.0 .
+      - run: docker push registry.cn-hongkong.aliyuncs.com/daoshi-cloud/zhibola-nuxt:1.0.0
