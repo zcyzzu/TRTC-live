@@ -45,8 +45,8 @@ export const historyVersions = function(latest, history) {
         onComplete: () => {
             gsap.to(history, {
                 display: "block",
-                ease: "elastic",
-                duration: 1.3,
+                ease: "back",
+                duration: 0.5,
                 opacity: 1,
                 x: 1000
             });
@@ -61,8 +61,8 @@ export const backToLatest = function(latest, history) {
         onComplete: () => {
             gsap.to(latest, {
                 display: "block",
-                ease: "elastic",
-                duration: 1.3,
+                ease: "back",
+                duration: 0.5,
                 opacity: 1,
                 x: 0
             });

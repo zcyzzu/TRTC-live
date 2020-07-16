@@ -4,7 +4,7 @@ export const computeHeight = function(info) {
         info.winVersion == "win 8"
     ) {
         return 258;
-    } else if (info.isMac) {
+    } else if (info.isMac && info.flag) {
         return 258;
     } else if (info.isWindows && info.winVersion == "win 7") {
         return 258;

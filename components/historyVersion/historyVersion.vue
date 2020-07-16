@@ -36,7 +36,7 @@
         </v-btn>
       </div>
       <v-btn @click="back" block color="#1976d2" class="white--text my-2">
-        <v-icon style="position:relative;top:2px">mdi-keyboard-return</v-icon>返回
+        <v-icon style="position:relative;top:1px" small>mdi-chevron-left</v-icon>返回
       </v-btn>
     </v-card>
   </div>
