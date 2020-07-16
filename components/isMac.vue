@@ -1,16 +1,14 @@
 <template>
   <div>
-    <btn :btnInfo="ceshi1"></btn>
-    <btn :btnInfo="ceshi2"></btn>
-    <btn :btnInfo="ceshi5" @historyVersion="historyVersion"></btn>
+    <btn v-for="(content,index) in restart.desktop" :key="index" :btnInfo="content"></btn>
     <div class="d-flex justify-space-between">
-      <btn :btnInfo="ceshi3"></btn>
-      <btn :btnInfo="ceshi4"></btn>
+      <btn v-for="(content,index) in restart.mobile" :key="index" :btnInfo="content"></btn>
     </div>
+    <btn :btnInfo="restart.history_version" @historyVersion="historyVersion"></btn>
   </div>
 </template>
 <script>
-import { setBtn } from "~/config/setBtn";
+import { btnList } from "~/config/btnList";
 import btn from "~/components/base/btn";
 export default {
   components: {
@@ -19,36 +17,11 @@ export default {
   props: ["info"],
   data() {
     return {
-      ceshi1: {},
-      ceshi2: {},
-      ceshi3: {},
-      ceshi4: {},
-      ceshi5: {}
+     restart:{}
     };
   },
-  mounted() {
-    this.ceshi1 = setBtn(this.info).moreinfos;
-    this.ceshi2 = setBtn(this.info).otherSystem;
-    this.ceshi3 = {
-      downloadInfo: "Android",
-      block: false,
-      icon: "mdi-android",
-      href: ""
-    };
-    this.ceshi4 = {
-      downloadInfo: "IOS",
-      block: false,
-      icon: "mdi-apple",
-      href: "",
-      ml: 4
-    };
-    this.ceshi5 = {
-      downloadInfo: "历史版本下载",
-      block: true,
-      icon: "",
-      href: "",
-      rightArray: "mdi-chevron-right"
-    };
+  beforeMount() {
+    this.restart = btnList(this.info, "mac");
   },
    methods: {
     historyVersion(){

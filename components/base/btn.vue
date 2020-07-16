@@ -6,7 +6,6 @@
       max-width="350"
       color="blue darken-2"
       class="white--text mb-3"
-      :style="{marginLeft:btnInfo.ml+'px'}"
       :block="btnInfo.block"
       :href="btnInfo.href"
       min-width="170"
@@ -41,17 +40,13 @@ export default {
         default: "mdi-apple"
       },
       block: {
-        type: Boolean,
+        type: Boolean||String,
         default: false
       },
       rightArray:{
         type:String,
         default:''
       },
-      ml:{
-        type:Number,
-        default:0
-      }
     }
   },
   data() {

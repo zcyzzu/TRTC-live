@@ -22,8 +22,6 @@ export const readUserAgent = function() {
     let isMac = Boolean;
     let isWindows = Boolean;
     let winVersion = "";
-    let maxHeight = null;
-    let minHeight = null;
     let downloadHrefWin = ""
     let pcNum = Number; {
         //判断系统win/mac
@@ -39,8 +37,6 @@ export const readUserAgent = function() {
             if (userAgentInfo.indexOf("Windows NT 5") != -1) {
                 winVersion = "XP系统";
             } else if (userAgentInfo.indexOf("Windows NT 7") != -1) {
-                maxHeight = 760;
-                minHeight = 425;
                 winVersion = "win 7";
             } else if (userAgentInfo.indexOf("Windows NT 8") != -1) {
                 winVersion = "win 8";
@@ -50,11 +46,11 @@ export const readUserAgent = function() {
             //判断windows系统位数 32/64
             let agent = userAgentInfo.toLowerCase();
             if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_ia32%20.exe"
+                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
                 pcNum = 32
             }
             if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_1.5.0_win_x64%20.exe"
+                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
                 pcNum = 64
             }
         }
@@ -66,19 +62,15 @@ export const readUserAgent = function() {
         isMac: isMac,
         isWindows: isWindows,
         winVersion: winVersion,
-        maxHeight: maxHeight,
-        minHeight: minHeight,
         downloadHrefWin: downloadHrefWin,
         pcNum: pcNum
     };
     return {
         flag: false, //false,说明是手机端
-        mobileSystem: 'iPhone', //手机系统 可以判断手机类型
+        mobileSystem: 'Android', //手机系统 可以判断手机类型
         isMac: false,
         isWindows: false,
         winVersion: '',
-        maxHeight: maxHeight,
-        minHeight: minHeight,
         downloadHrefWin: downloadHrefWin,
         pcNum: 64
     };

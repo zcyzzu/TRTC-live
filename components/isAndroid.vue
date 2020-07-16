@@ -1,61 +1,25 @@
 <template>
   <div>
-    <btn :btnInfo="ceshi1"></btn>
-    <btn :btnInfo="ceshi2"></btn>
-    <btn :btnInfo="ceshi3"></btn>
-    <btn :btnInfo="ceshi4"></btn>
-    <btn :btnInfo="ceshi5" @historyVersion="historyVersion"></btn>
+    <btn v-for="(content,index) in restart.desktop" :key="index" :btnInfo="content"></btn>
+    <btn :btnInfo="restart.history_version" @historyVersion="historyVersion"></btn>
   </div>
 </template>
 <script>
+import { btnList } from "~/config/btnList";
 export default {
   props: ["info"],
   data() {
     return {
-      ceshi1: {},
-      ceshi2: {},
-      ceshi3: {},
-      ceshi4: {},
-      ceshi5: {}
+      restart: {}
     };
   },
-  mounted() {
-    this.ceshi1 = {
-      downloadInfo: "IOS",
-      block: true,
-      icon: "mdi-apple",
-      href: ""
-    };
-    this.ceshi2 = {
-      downloadInfo: "MacOS",
-      block: true,
-      icon: "mdi-apple",
-      href: "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg"
-    };
-    this.ceshi3 = {
-      downloadInfo: "Windows 64位",
-      block: true,
-      icon: "mdi-microsoft-windows",
-      href: "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
-    };
-     this.ceshi4 = {
-      downloadInfo: "Windows 32位",
-      block: true,
-      icon: "mdi-microsoft-windows",
-      href: "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
-    };
-     this.ceshi5 = {
-      downloadInfo: "历史版本下载",
-      block: true,
-      icon: "",
-      href: "",
-      rightArray:'mdi-chevron-right'
-    };
+  beforeMount() {
+    this.restart = btnList(this.info, "Android");
   },
   methods: {
-    historyVersion(){
-      this.$emit('historyVersion')
+    historyVersion() {
+      this.$emit("historyVersion");
     }
-  },
+  }
 };
 </script>
