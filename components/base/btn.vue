@@ -1,30 +1,76 @@
 <template>
   <div>
     <v-btn
-      :color="color"
-      class="white--text mt-5"
-      height="0"
-      style="opacity:0;display:none"
-      block
+      max-height="60"
+      min-height="50"
+      max-width="350"
+      color="blue darken-2"
+      class="white--text mb-3"
+      :style="{marginLeft:btnInfo.ml+'px'}"
+      :block="btnInfo.block"
+      :href="btnInfo.href"
+      min-width="170"
+      @click="dialogs"
     >
-      <a :href="hrefs">{{text}}</a>
+      <v-icon small>{{btnInfo.icon}}</v-icon>
+      <span>{{btnInfo.downloadInfo}}</span>
+      <v-icon small>{{btnInfo.rightArray}}</v-icon>
     </v-btn>
+    <v-dialog v-model="dialog" max-width="400">
+      <v-card>
+        <v-card-title>提示信息</v-card-title>
+        <v-card-text>手机版会在近期推出，敬请期待!</v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
 export default {
   props: {
-    text: {
-      type: String,
-      default: "这是按钮内容"
-    },
-    hrefs: {
-      type: String,
-      default: null
-    },
-    color:{
+    btnInfo: {
+      href: {
         type: String,
-        default: 'blue darken-2',
+        default: ""
+      },
+      downloadInfo: {
+        type: String,
+        default: "Mac版下载"
+      },
+      icon: {
+        type: String,
+        default: "mdi-apple"
+      },
+      block: {
+        type: Boolean,
+        default: false
+      },
+      rightArray:{
+        type:String,
+        default:''
+      },
+      ml:{
+        type:Number,
+        default:0
+      }
+    }
+  },
+  data() {
+    return {
+      dialog: false
+    };
+  },
+  methods: {
+    dialogs() {
+      if (
+        this.btnInfo.downloadInfo == "ios版" ||
+        this.btnInfo.downloadInfo == "IOS"
+      ) {
+        this.dialog = true;
+      } else if (this.btnInfo.downloadInfo == "Android") {
+        this.dialog = true;
+      }else if(this.btnInfo.downloadInfo == "历史版本下载"){
+        this.$emit('historyVersion')
+      }
     }
   }
 };
