@@ -40,13 +40,13 @@ export default {
         default: "mdi-apple"
       },
       block: {
-        type: Boolean||String,
+        type: Boolean || String,
         default: false
       },
-      rightArray:{
-        type:String,
-        default:''
-      },
+      rightArray: {
+        type: String,
+        default: ""
+      }
     }
   },
   data() {
@@ -57,14 +57,14 @@ export default {
   methods: {
     dialogs() {
       if (
-        this.btnInfo.downloadInfo == "ios版" ||
-        this.btnInfo.downloadInfo == "IOS"
+        this.btnInfo.downloadInfo == "iOS版" ||
+        this.btnInfo.downloadInfo == "iOS"
       ) {
         this.dialog = true;
       } else if (this.btnInfo.downloadInfo == "Android") {
         this.dialog = true;
-      }else if(this.btnInfo.downloadInfo == "历史版本下载"){
-        this.$emit('historyVersion')
+      } else if (this.btnInfo.downloadInfo == "历史版本下载") {
+        this.$emit("historyVersion");
       }
     }
   }

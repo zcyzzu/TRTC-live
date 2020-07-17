@@ -5,6 +5,7 @@ COPY package.json package-lock*.json ./
 RUN npm install 
 COPY . .
 RUN npm run build
+RUN npm run export
 
 FROM node:12.6.0-alpine AS prod
 ENV NODE_ENV=production
@@ -13,9 +14,7 @@ RUN apk add --no-cache tini
 WORKDIR /app
 COPY package.json package-lock*.json ./
 RUN npm install && npm cache clean --force
-COPY --from=build /app/.nuxt/. .nuxt/
-COPY --from=build /app/static/. static/
+COPY --from=build /app/dist/. dist/
 COPY nuxt.config.js nuxt.config.js
-COPY assets/. assets/
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["node", "./node_modules/nuxt/bin/nuxt.js", "start"]
+CMD ["npm", "run", "serve"]

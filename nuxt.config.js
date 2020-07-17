@@ -14,7 +14,7 @@ export default {
      ** Nuxt target
      ** See https://nuxtjs.org/api/configuration-target
      */
-    target: 'server',
+    target: 'static',
     /*
      ** Headers of the page
      ** See https://nuxtjs.org/api/configuration-head
@@ -27,18 +27,18 @@ export default {
             { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
         ],
         link: [{
-                rel: 'icon',
-                type: 'image/x-icon',
-                href: '/favicon.ico'
-            },
-            {
-                rel: 'stylesheet',
-                href: 'https://fonts.loli.net/icon?family=Material+Icons'
-            },
-            {
-                rel: 'stylesheet',
-                href: 'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css'
-            }
+            rel: 'icon',
+            type: 'image/x-icon',
+            href: '/favicon.ico'
+        },
+        {
+            rel: 'stylesheet',
+            href: 'https://fonts.loli.net/icon?family=Material+Icons'
+        },
+        {
+            rel: 'stylesheet',
+            href: 'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css'
+        }
         ]
     },
     /*
@@ -121,6 +121,6 @@ export default {
         /*
          ** You can extend webpack config here
          */
-        extend(config, ctx) {},
+        extend(config, ctx) { },
     },
 }
