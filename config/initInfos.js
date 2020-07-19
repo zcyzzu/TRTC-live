@@ -65,6 +65,20 @@ export const initInfos = {
         icon: "mdi-microsoft-windows",
         href: "https://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
     },
+    moduleOne: {
+        downloadInfo: "依赖①",
+        block: false,
+        icon: "",
+        href:
+          "https://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
+      },
+      moduleTwo: {
+        downloadInfo: "依赖②",
+        block: false,
+        icon: "",
+        href:
+          "https://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+      },
     history_version: {
         downloadInfo: "历史版本下载",
         block: true,

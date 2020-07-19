@@ -7,7 +7,7 @@
           <!-- -------------------------------------------------------------------------- -->
           <div class="d-flex justify-center">
             <v-card
-              width="400"
+              width="408"
               class="rounded-0 rounded-t-xl pa-md-5 pa-5 pb-md-0 pb-0"
               color="#3f51a5"
               elevation="0"

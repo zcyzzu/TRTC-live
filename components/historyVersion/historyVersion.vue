@@ -7,7 +7,7 @@
       max-height="620"
       class="rounded-xl pa-md-5 pa-5"
       style="display:none;position:relative;right:1000px"
-      width="400"
+      width="408"
       id="ceshiCard"
     >
       <h1 class="text-md-h4 text-h5 white--text text-center">历史版本下载</h1>

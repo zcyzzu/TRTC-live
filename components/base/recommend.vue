@@ -22,6 +22,7 @@
 </template>
 <script>
 import { setBtn } from "~/config/setBtn";
+import { initInfos } from "~/config/initInfos";
 import btn from "~/components/base/btn";
 import isWin7 from "~/components/base/isWindows7";
 
@@ -38,26 +39,9 @@ export default {
   data() {
     return {
       version: "",
-      moduleOne: {
-        downloadInfo: "依赖①",
-        block: false,
-        icon: "",
-        href:
-          "https://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
-      },
-      moduleTwo: {
-        downloadInfo: "依赖②",
-        block: false,
-        icon: "",
-        href:
-          "https://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
-      },
-      download: {
-        downloadInfo: "",
-        block: true,
-        icon: "",
-        href: ""
-      }
+      moduleOne: initInfos.moduleOne,
+      moduleTwo:initInfos.moduleTwo,
+      download:initInfos.empty
     };
   }
 };
