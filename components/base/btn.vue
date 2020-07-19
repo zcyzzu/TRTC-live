@@ -56,10 +56,7 @@ export default {
   },
   methods: {
     dialogs() {
-      if (
-        this.btnInfo.downloadInfo == "iOS版" ||
-        this.btnInfo.downloadInfo == "iOS"
-      ) {
+      if (this.btnInfo.downloadInfo == "IOS") {
         this.dialog = true;
       } else if (this.btnInfo.downloadInfo == "Android") {
         this.dialog = true;

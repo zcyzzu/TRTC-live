@@ -46,11 +46,11 @@ export const readUserAgent = function() {
             //判断windows系统位数 32/64
             let agent = userAgentInfo.toLowerCase();
             if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
+                downloadHrefWin = "https://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
                 pcNum = 32
             }
             if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
+                downloadHrefWin = "https://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
                 pcNum = 64
             }
         }
@@ -66,11 +66,11 @@ export const readUserAgent = function() {
         pcNum: pcNum
     };
     return {
-        flag: false, //false,说明是手机端
-        mobileSystem: 'Android', //手机系统 可以判断手机类型
+        flag: true, //false,说明是手机端
+        mobileSystem: '', //手机系统 可以判断手机类型
         isMac: false,
-        isWindows: false,
-        winVersion: '',
+        isWindows: true,
+        winVersion: 'win 7',
         downloadHrefWin: downloadHrefWin,
         pcNum: 64
     };

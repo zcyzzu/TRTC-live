@@ -31,10 +31,10 @@ export default {
             type: 'image/x-icon',
             href: '/favicon.ico'
         },
-        {
-            rel: 'stylesheet',
-            href: 'https://fonts.loli.net/icon?family=Material+Icons'
-        },
+        // {
+        //     rel: 'stylesheet',
+        //     href: 'https://fonts.loli.net/icon?family=Material+Icons'
+        // },
         {
             rel: 'stylesheet',
             href: 'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css'
