@@ -66,9 +66,9 @@ export const readUserAgent = function() {
         pcNum: pcNum
     };
     return {
-        flag: false, //false,说明是手机端
-        mobileSystem: 'Android', //手机系统 可以判断手机类型
-        isMac: false,
+        flag: true, //false,说明是手机端
+        mobileSystem: '', //手机系统 可以判断手机类型
+        isMac: true,
         isWindows: false,
         winVersion: '',
         downloadHrefWin: downloadHrefWin,

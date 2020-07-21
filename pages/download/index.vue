@@ -82,13 +82,15 @@ export default {
         downloadInfo: "依赖①",
         block: false,
         icon: "",
-        href: "http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
+        href:
+          "http://openstore.daoshi.cloud/zhibola/Windows6.1-KB4019990-x86.msu"
       },
       moduleTwo: {
         downloadInfo: "依赖②",
         block: false,
         icon: "",
-        href: "http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
+        href:
+          "http://openstore.daoshi.cloud/zhibola/NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
       },
       download: {
         downloadInfo: "",
@@ -100,10 +102,10 @@ export default {
   },
   beforeMount() {
     this.userAgentInfo = readUserAgent();
-    this.download = setBtn(this.userAgentInfo).infos;
     this.cardsHeight = computeHeight(this.userAgentInfo);
   },
   mounted() {
+    this.download = setBtn(this.userAgentInfo).infos;
     downloadCard(document.querySelector("#downloadCard"));
   },
   methods: {
