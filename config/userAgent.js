@@ -22,7 +22,6 @@ export const readUserAgent = function() {
     let isMac = Boolean;
     let isWindows = Boolean;
     let winVersion = "";
-    let downloadHrefWin = ""
     let pcNum = Number; {
         //判断系统win/mac
         isMac = (function() {
@@ -45,14 +44,8 @@ export const readUserAgent = function() {
             }
             //判断windows系统位数 32/64
             let agent = userAgentInfo.toLowerCase();
-            if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe"
-                pcNum = 32
-            }
-            if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
-                downloadHrefWin = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
-                pcNum = 64
-            }
+            agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0 ? pcNum = 32 : null
+            agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0 ? pcNum = 64 : null
         }
     }
     // 分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线
@@ -62,16 +55,14 @@ export const readUserAgent = function() {
         isMac: isMac,
         isWindows: isWindows,
         winVersion: winVersion,
-        downloadHrefWin: downloadHrefWin,
         pcNum: pcNum
     };
     return {
         flag: true, //false,说明是手机端
         mobileSystem: '', //手机系统 可以判断手机类型
-        isMac: true,
-        isWindows: false,
-        winVersion: '',
-        downloadHrefWin: downloadHrefWin,
+        isMac: false,
+        isWindows: true,
+        winVersion: 'win 7',
         pcNum: 64
     };
 };

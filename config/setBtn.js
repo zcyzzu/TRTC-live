@@ -1,76 +1,48 @@
-export const setBtn = function(ele) {
-    let infos = {
-        downloadInfo: "",
-        block: true,
-        icon: "",
-        href: ""
-    };
-    let moreinfos = {
-        downloadInfo: "",
-        block: true,
-        icon: "",
-        href: ""
-    }
-    let otherSystem = {
-        downloadInfo: "",
-        block: true,
-        icon: "",
-        href: ""
-    }
+import { initInfos } from "./initInfos";
+export const setBtn = function (ele) {
+    let infos = initInfos.empty
+    let moreinfos = initInfos.empty
+    let otherSystem = initInfos.empty
     if (ele.flag) {
         //电脑端
         if (ele.isMac) {
             //mac电脑
-            infos.downloadInfo = "MacOS";
-            infos.icon = "mdi-apple";
-            infos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg";
-            //windows
-            moreinfos.downloadInfo = 'Windows' + " " + 64;
-            moreinfos.icon = "mdi-microsoft-windows";
-            moreinfos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe";
-            otherSystem.downloadInfo = 'Windows' + " " + 32
-            otherSystem.icon = "mdi-microsoft-windows";
-            otherSystem.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe";
-
+            infos = initInfos.MacOS
+            moreinfos = initInfos.win64
+            otherSystem = initInfos.win32
         } else {
             //windows电脑
-            if (ele.winVersion == "win 7") {
-                //win 7 系统
-                infos.downloadInfo = ele.winVersion + " " + ele.pcNum;
-                infos.icon = "mdi-microsoft-windows";
-                infos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe";
-                ele.pcNum == 64 ? moreinfos.downloadInfo = ele.winVersion + " " + 32 : moreinfos.downloadInfo = ele.winVersion + " " + 64
-                moreinfos.icon = "mdi-microsoft-windows";
-                moreinfos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe";
-                otherSystem.downloadInfo = "MacOS";
-                otherSystem.icon = "mdi-apple";
-                otherSystem.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg";
-            } else {
-                //其他系统
-                infos.downloadInfo = ele.winVersion + " " + ele.pcNum;
-                infos.icon = "mdi-microsoft-windows";
-                infos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe";
-                ele.pcNum == 64 ? moreinfos.downloadInfo = ele.winVersion + " " + 32 : moreinfos.downloadInfo = ele.winVersion + " " + 64
-                moreinfos.icon = "mdi-microsoft-windows";
-                moreinfos.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_win_ia32%20.exe";
-                otherSystem.downloadInfo = "MacOS";
-                otherSystem.icon = "mdi-apple";
-                otherSystem.href = "http://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg";
+            if (ele.winVersion == 'win 7') {
+                if (ele.pcNum == 64) {
+                    infos = initInfos.win7_64
+                    moreinfos = initInfos.win7_32
+                } else {
+                    infos = initInfos.win7_32
+                    moreinfos = initInfos.win7_64
+                }
+            } else if(ele.winVersion=='win 8') {
+                if (ele.pcNum == 64) {
+                    infos = initInfos.win8_64
+                    moreinfos = initInfos.win8_32
+                } else {
+                    infos = initInfos.win8_32
+                    moreinfos = initInfos.win8_64
+                }
             }
+            else if(ele.winVersion=='win 10') {
+                if (ele.pcNum == 64) {
+                    infos = initInfos.win10_64
+                    moreinfos = initInfos.win10_32
+                } else {
+                    infos = initInfos.win10_32
+                    moreinfos = initInfos.win10_64
+                }
+            }
+            otherSystem = initInfos.MacOS
         }
     } else {
         //手机端
-        if (ele.mobileSystem == "iPhone") {
-            //ios系统
-            infos.downloadInfo = "ios版";
-            infos.icon = "mdi-apple";
-            infos.href = "";
-        } else {
-            //安卓系统
-            infos.downloadInfo = "Android";
-            infos.icon = "mdi-android";
-            infos.href = "";
-        }
+        ele.mobileSystem == "iPhone" ? infos = initInfos.IOS_full : infos = initInfos.Android_full
     }
     return {
         infos: infos,

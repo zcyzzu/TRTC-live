@@ -15,7 +15,7 @@
       <span>{{btnInfo.downloadInfo}}</span>
       <v-icon small>{{btnInfo.rightArray}}</v-icon>
     </v-btn>
-    <v-dialog v-model="dialog" max-width="400">
+    <v-dialog v-model="dialog" max-width="408">
       <v-card>
         <v-card-title>提示信息</v-card-title>
         <v-card-text>手机版会在近期推出，敬请期待!</v-card-text>
@@ -40,13 +40,13 @@ export default {
         default: "mdi-apple"
       },
       block: {
-        type: Boolean||String,
+        type: Boolean || String,
         default: false
       },
-      rightArray:{
-        type:String,
-        default:''
-      },
+      rightArray: {
+        type: String,
+        default: ""
+      }
     }
   },
   data() {
@@ -56,15 +56,12 @@ export default {
   },
   methods: {
     dialogs() {
-      if (
-        this.btnInfo.downloadInfo == "ios版" ||
-        this.btnInfo.downloadInfo == "IOS"
-      ) {
+      if (this.btnInfo.downloadInfo == "IOS") {
         this.dialog = true;
       } else if (this.btnInfo.downloadInfo == "Android") {
         this.dialog = true;
-      }else if(this.btnInfo.downloadInfo == "历史版本下载"){
-        this.$emit('historyVersion')
+      } else if (this.btnInfo.downloadInfo == "历史版本下载") {
+        this.$emit("historyVersion");
       }
     }
   }
