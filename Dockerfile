@@ -1,5 +1,6 @@
 FROM node:12.6.0-alpine AS build
 ENV NODE_ENV=development
+ENV SERVER_PORT=3000
 WORKDIR /app
 COPY package.json package-lock*.json ./
 RUN npm install 

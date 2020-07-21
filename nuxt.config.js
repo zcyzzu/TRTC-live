@@ -7,7 +7,7 @@ export default {
      */
     mode: 'universal',
     server: {
-        port: 8008, // default: 3000
+        port: process.env.SERVER_PORT || 8008, // default: 3000
         host: '0.0.0.0' // default: localhost,
     },
     /*
