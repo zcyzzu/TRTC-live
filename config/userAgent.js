@@ -60,9 +60,9 @@ export const readUserAgent = function() {
     return {
         flag: true, //false,说明是手机端
         mobileSystem: '', //手机系统 可以判断手机类型
-        isMac: false,
-        isWindows: true,
-        winVersion: 'win 7',
+        isMac: true,
+        isWindows: false,
+        winVersion: '',
         pcNum: 64
     };
 };

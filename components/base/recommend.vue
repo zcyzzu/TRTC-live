@@ -6,7 +6,7 @@
       <v-icon small color="white" style="position:relative;top:-1px">{{version.icon}}</v-icon>
       {{version.downloadInfo}}
       <span
-        v-if="version.downloadInfo=='MacOs'||version.downloadInfo=='ios'||version.downloadInfo=='Android'"
+        v-if="version.downloadInfo=='MacOS'||version.downloadInfo=='IOS'||version.downloadInfo=='Android'"
       >版</span>
       <span v-else>位版</span>
     </p>

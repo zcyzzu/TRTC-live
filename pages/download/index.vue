@@ -1,7 +1,7 @@
 <template>
   <div class="zIndex">
     <pageBar></pageBar>
-    <div style="min-height:90vh" class="d-flex align-center justify-center">
+    <div style="min-height:85vh" class="d-flex align-center justify-center">
       <div class="d-flex justify-center">
         <div id="downloadCard" style="opacity:0">
           <!-- -------------------------------------------------------------------------- -->
