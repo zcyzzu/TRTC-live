@@ -1,4 +1,4 @@
-export const readUserAgent = function() {
+export const readUserAgent = function () {
     let flag = true;
     let userAgentInfo = navigator.userAgent;
     let mobileSystem = ""; {
@@ -24,10 +24,10 @@ export const readUserAgent = function() {
     let winVersion = "";
     let pcNum = Number; {
         //判断系统win/mac
-        isMac = (function() {
+        isMac = (function () {
             return /macintosh|mac os x/i.test(navigator.userAgent);
         })();
-        isWindows = (function() {
+        isWindows = (function () {
             return /windows|win32/i.test(navigator.userAgent);
         })();
         if (isWindows) {
@@ -56,13 +56,5 @@ export const readUserAgent = function() {
         isWindows: isWindows,
         winVersion: winVersion,
         pcNum: pcNum
-    };
-    return {
-        flag: true, //false,说明是手机端
-        mobileSystem: '', //手机系统 可以判断手机类型
-        isMac: true,
-        isWindows: false,
-        winVersion: '',
-        pcNum: 64
     };
 };
