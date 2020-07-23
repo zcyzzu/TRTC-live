@@ -18,7 +18,7 @@ export const initInfos = {
         href: ""
     },
     IOS: {
-        downloadInfo: "IOS",
+        downloadInfo: "iOS",
         block: false,
         icon: "mdi-apple",
         href: ""

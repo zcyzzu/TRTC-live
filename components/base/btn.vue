@@ -15,17 +15,22 @@
       <span>{{btnInfo.downloadInfo}}</span>
       <v-icon small>{{btnInfo.rightArray}}</v-icon>
     </v-btn>
-    <v-dialog v-model="dialog" max-width="408" >
+    <v-dialog v-model="dialog" max-width="408">
       <v-card class="downloadCard">
         <v-card-title class="white--text">{{dialogTitle}}</v-card-title>
         <v-card-actions class="px-6 py-1 white--text">{{dialogText_code}}</v-card-actions>
         <div v-if="isAndroid">
-          <v-img class="mx-auto" height="200" width="200" src="./AndroidCode.png"></v-img>
+          <v-img class="mx-auto" height="200" width="200" src="/AndroidCode.png"></v-img>
           <v-card-actions class="px-6 py-1 white--text">{{dialogText_a}}</v-card-actions>
           <v-card-text class="text-center">
-            <v-btn color="blue darken-2" class="white--text mb-3" href="https://openstore.daoshi.cloud/zhibola/zhibola_latest.apk" elevation="0">
-              <v-icon>mdi-download</v-icon>
-              点此下载到本机</v-btn>
+            <v-btn
+              color="blue darken-2"
+              class="white--text mb-3"
+              href="https://openstore.daoshi.cloud/zhibola/zhibola_latest.apk"
+              elevation="0"
+            >
+              <v-icon>mdi-download</v-icon>点此下载到本机
+            </v-btn>
           </v-card-text>
         </div>
       </v-card>
@@ -38,25 +43,25 @@ export default {
     btnInfo: {
       href: {
         type: String,
-        default: "",
+        default: ""
       },
       downloadInfo: {
         type: String,
-        default: "Mac版下载",
+        default: "Mac版下载"
       },
       icon: {
         type: String,
-        default: "mdi-apple",
+        default: "mdi-apple"
       },
       block: {
         type: Boolean || String,
-        default: false,
+        default: false
       },
       rightArray: {
         type: String,
-        default: "",
-      },
-    },
+        default: ""
+      }
+    }
   },
   data() {
     return {
@@ -64,7 +69,7 @@ export default {
       dialogTitle: "提示信息",
       dialogText_code: "手机版会在近期推出，敬请期待",
       dialogText_a: "",
-      isAndroid: false,
+      isAndroid: false
     };
   },
   methods: {
@@ -80,12 +85,12 @@ export default {
       } else if (this.btnInfo.downloadInfo == "历史版本下载") {
         this.$emit("historyVersion");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
-  .downloadCard{
-     background: linear-gradient(#1976d2, #3f51a5)!important;
-  }
+.downloadCard {
+  background: linear-gradient(#1976d2, #3f51a5) !important;
+}
 </style>
