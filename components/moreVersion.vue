@@ -2,6 +2,7 @@
   <div>
     <transition name="zcy">
       <div v-if="isShow">
+        <!-- TODO 这些能否用一个组件完成？ -->
         <div v-if="info.isWindows&&info.winVersion!='win 7'">
           <!-- win10/win8 -->
           <notWin7 :info="info" @historyVersion="historyVersion"></notWin7>
