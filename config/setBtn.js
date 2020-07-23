@@ -1,5 +1,5 @@
 import { initInfos } from "./initInfos";
-export const setBtn = function(ele) {
+export const setBtn = function (ele) {
     let infos = initInfos.empty
     let moreinfos = initInfos.empty
     let otherSystem = initInfos.empty
@@ -41,7 +41,7 @@ export const setBtn = function(ele) {
         }
     } else {
         //手机端
-        ele.mobileSystem == "iPhone" ? infos = initInfos.IOS_full : infos = initInfos.Android_full
+        ele.mobileSystem == "iPhone" ? infos = initInfos.iOS_full : infos = initInfos.Android_full
     }
     return {
         infos: infos,

@@ -15,7 +15,7 @@
           <isWin7 :info="info" @historyVersion="historyVersion"></isWin7>
         </div>
         <div v-if="info.flag==false&&info.mobileSystem=='iPhone'">
-          <!-- ios -->
+          <!-- iOS -->
           <isIphone :info="info" @historyVersion="historyVersion"></isIphone>
         </div>
         <div v-else-if="info.flag==false&&info.mobileSystem=='Android'">

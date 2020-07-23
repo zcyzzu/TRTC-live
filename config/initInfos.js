@@ -5,8 +5,8 @@ export const initInfos = {
         icon: "mdi-android",
         href: ""
     },
-    IOS_full: {
-        downloadInfo: "IOS",
+    iOS_full: {
+        downloadInfo: "iOS",
         block: true,
         icon: "mdi-apple",
         href: ""
@@ -17,7 +17,7 @@ export const initInfos = {
         icon: "mdi-android",
         href: ""
     },
-    IOS: {
+    iOS: {
         downloadInfo: "iOS",
         block: false,
         icon: "mdi-apple",
