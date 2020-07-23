@@ -14,6 +14,7 @@ export default {
     };
   },
   beforeMount() {
+    //TODO system变量应该根据点击按钮绑定的数据自动传入，不需要手动传入Android，或者iPhone，mac等
     this.restart = btnList(this.info, "Android");
   },
   methods: {
