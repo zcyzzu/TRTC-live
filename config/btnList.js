@@ -1,11 +1,11 @@
 import { setBtn } from "./setBtn";
 import { initInfos } from "./initInfos";
-export const btnList = function(ele, system) {
+export const btnList = function (ele, system) {
     let btnList = {
         desktop: {},
         mobile: {
             Android: initInfos.Android,
-            IOS: initInfos.IOS
+            iOS: initInfos.iOS
         },
         history_version: initInfos.history_version
     };
@@ -21,7 +21,7 @@ export const btnList = function(ele, system) {
             break;
         case "Android":
             btnList.desktop = {
-                IOS: initInfos.IOS_full,
+                iOS: initInfos.iOS_full,
                 MacOS: initInfos.MacOS,
                 win64: initInfos.win10_64,
                 win32: initInfos.win10_32

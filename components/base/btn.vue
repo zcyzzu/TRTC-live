@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     dialogs() {
-      if (this.btnInfo.downloadInfo == "IOS") {
+      if (this.btnInfo.downloadInfo == "iOS") {
         this.dialog = true;
       } else if (this.btnInfo.downloadInfo == "Android") {
         this.dialog = true;
