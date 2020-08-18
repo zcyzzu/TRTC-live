@@ -22,7 +22,8 @@ export const readUserAgent = function() {
     let isMac = Boolean;
     let isWindows = Boolean;
     let winVersion = "";
-    let pcNum = Number; {
+    // let pcNum = Number; 
+    {
         //判断系统win/mac
         isMac = (function() {
             return /macintosh|mac os x/i.test(navigator.userAgent);
@@ -43,9 +44,9 @@ export const readUserAgent = function() {
                 winVersion = "win 10";
             }
             //判断windows系统位数 32/64
-            let agent = userAgentInfo.toLowerCase();
-            agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0 ? pcNum = 32 : null
-            agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0 ? pcNum = 64 : null
+            // let agent = userAgentInfo.toLowerCase();
+            // agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0 ? pcNum = 32 : null
+            // agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0 ? pcNum = 64 : null
         }
     }
     // 分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线分割线
@@ -55,6 +56,6 @@ export const readUserAgent = function() {
         isMac: isMac,
         isWindows: isWindows,
         winVersion: winVersion,
-        pcNum: pcNum
+        // pcNum: pcNum
     };
 };
