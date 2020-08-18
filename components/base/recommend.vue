@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1 class="text-center white--text text-md-h4 text-h5">下载直播软件</h1>
-    <!-- TODO 为何使用v-if else，如果有需要，可以用单独一个字段定义显示信息 -->
     <p class="white--text my-5">
       根据当前设备，推荐你选择
       <v-icon small color="white" style="position:relative;top:-1px">{{
