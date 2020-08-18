@@ -11,17 +11,27 @@
       min-width="170"
       @click="dialogs"
     >
-      <v-icon small>{{btnInfo.icon}}</v-icon>
-      <span>{{btnInfo.downloadInfo}}</span>
-      <v-icon small>{{btnInfo.rightArray}}</v-icon>
+      <v-icon small>{{ btnInfo.icon }}</v-icon>
+      <span>{{ btnInfo.downloadInfo }}</span>
+      <v-icon small>{{ btnInfo.rightArray }}</v-icon>
     </v-btn>
     <v-dialog v-model="dialog" max-width="408">
       <v-card class="downloadCard">
-        <v-card-title class="white--text">{{dialogTitle}}</v-card-title>
-        <v-card-actions class="px-6 py-1 white--text">{{dialogText_code}}</v-card-actions>
+        <v-card-title class="white--text">{{ dialogTitle }}</v-card-title>
+        <v-card-actions class="px-6 py-1 white--text">{{
+          dialogText_code
+        }}</v-card-actions>
         <div v-if="isAndroid">
-          <v-img class="mx-auto" height="200" width="200" src="/AndroidCode.png"></v-img>
-          <v-card-actions class="px-6 py-1 white--text">{{dialogText_a}}</v-card-actions>
+          <v-img
+            v-if="android_qrcode"
+            class="mx-auto"
+            height="200"
+            width="200"
+            src="/AndroidCode.png"
+          ></v-img>
+          <v-card-actions class="px-6 py-1 white--text">{{
+            dialogText_a
+          }}</v-card-actions>
           <v-card-text class="text-center">
             <v-btn
               color="blue darken-2"
@@ -38,6 +48,7 @@
   </div>
 </template>
 <script>
+import { readUserAgent } from "~/config/userAgent";
 export default {
   props: {
     btnInfo: {
@@ -69,19 +80,26 @@ export default {
       dialogTitle: "提示信息",
       dialogText_code: "手机版会在近期推出，敬请期待",
       dialogText_a: "",
-      isAndroid: false
+      isAndroid: false,
+      android_qrcode: true
     };
   },
   methods: {
     dialogs() {
-      if (this.btnInfo.downloadInfo == "iOS") {
+      if (this.btnInfo.downloadInfo == "ios") {
         this.dialog = true;
       } else if (this.btnInfo.downloadInfo == "Android") {
         this.dialog = true;
         this.isAndroid = true;
         this.dialogTitle = "Android版下载";
-        this.dialogText_code = "1.扫码下载";
-        this.dialogText_a = "2.直接下载";
+        if (readUserAgent().mobileSystem == "Android") {
+          this.dialogText_code = "";
+          this.dialogText_a = "";
+          this.android_qrcode = false;
+        } else {
+          this.dialogText_code = "1.扫码下载";
+          this.dialogText_a = "2.直接下载";
+        }
       } else if (this.btnInfo.downloadInfo == "历史版本下载") {
         this.$emit("historyVersion");
       }

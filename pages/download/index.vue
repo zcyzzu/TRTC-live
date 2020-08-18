@@ -38,7 +38,7 @@
           >
             <moreVersion @historyVersion="historyVersion" :info="userAgentInfo" ref="moreVersion"></moreVersion>
           </v-card>
-          <!-- -------------------------------------------------------------------------- -->
+          <!-- ---------------------------------------------------------------------------->
         </div>
         <historyVersion :info="userAgentInfo"></historyVersion>
       </div>
