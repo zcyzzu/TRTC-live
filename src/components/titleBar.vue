@@ -4,10 +4,10 @@
       <v-img
         src="../assets/logo.svg"
         class="ma-2"
-        max-height="25"
-        max-width="25"
+        max-height="15"
+        max-width="15"
       ></v-img>
-      <div class="d-flex align-center">
+      <div class="d-flex align-center text-subtitle-2">
         <span>直播啦</span>
       </div>
       <div
@@ -15,7 +15,7 @@
         @click="closeIndex"
         class="d-flex align-center pa-2"
       >
-        <v-icon>mdi-close</v-icon>
+        <v-icon small>mdi-close</v-icon>
       </div>
     </v-row>
   </div>

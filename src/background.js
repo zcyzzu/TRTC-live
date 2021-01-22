@@ -2,6 +2,7 @@
 import { app, protocol, BrowserWindow, ipcMain, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+const Axios = require("axios");
 const isDevelopment = process.env.NODE_ENV !== "production";
 protocol.registerSchemesAsPrivileged([
     { scheme: "app", privileges: { secure: true, standard: true } },
@@ -13,7 +14,7 @@ async function createWindow() {
     win = new BrowserWindow({
         show: false,
         width: 1410,
-        height: 960,
+        height: 760,
         frame: false,
         backgroundColor: "#eee",
         // resizable: false, //禁止自定义窗口尺寸
@@ -27,6 +28,7 @@ async function createWindow() {
     win.setMenu(null);
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
+        console.log(process.env.WEBPACK_DEV_SERVER_URL);
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
         if (!process.env.IS_TEST) win.webContents.openDevTools();
     } else {
@@ -54,7 +56,7 @@ async function createSettingWindow() {
         await wins.loadURL("http://localhost:8080/#/setting");
     } else {
         createProtocol("app");
-        wins.loadURL("app://./index.html#setting/general");
+        wins.loadURL("app://./index.html#setting");
     }
 }
 // Quit when all windows are closed.
@@ -94,6 +96,15 @@ app.on("ready", async() => {
         } else if (arg === "others" || arg === "general" || arg === "sound") {
             wins.destroy();
         }
+    });
+    ipcMain.on("login", function(event, arg) {
+        Axios.get(arg)
+            .then((val) => {
+                event.reply("login_back", val.data);
+            })
+            .catch((err) => {
+                event.reply("login_back_error", err);
+            });
     });
 });
 

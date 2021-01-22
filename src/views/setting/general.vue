@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>this is 常规设置</h1>
+    <h1>常规设置</h1>
   </div>
 </template>
 <script>
