@@ -27,28 +27,28 @@
     </v-row>
     <v-btn text @click="setting">设置 </v-btn>
     <log ref="log"></log>
+    <overlay ref="overlay"></overlay>
   </div>
 </template>
 <script>
 import titleBar from "@/components/titleBar";
+import overlay from "@/components/overlay";
 import log from "@/components/log";
 import { ipcRenderer } from "electron";
 export default {
   components: {
     titleBar,
     log,
+    overlay,
   },
   data() {
     return {
-      roomJwt: "y5gx0b9GwbwxmfENsu7Mp",
+      roomJwt: "TjhofKvysZKk_9PFHkfMm",
     };
   },
   mounted() {
     ipcRenderer.on("login_back", (event, arg) => {
       this.$store.commit("setLoginInfo", arg);
-      this.$router.push({
-        path: "/room",
-      });
     });
     ipcRenderer.on("login_back_error", (event, arg) => {
       this.$refs.log.logInfo = {
@@ -65,6 +65,7 @@ export default {
     enterRoom() {
       let reg = /[0123456789ABCDEFGHJKLMNOPQRSTUVWXYZ_abcdefghijkmnopqrstuvwxyz-]{21}/g;
       if (reg.test(this.roomJwt)) {
+        this.$store.commit("setOverlay");
         ipcRenderer.send(
           "login",
           `https://live.daoshi.cloud/api/v2/roominfo/${this.roomJwt}`

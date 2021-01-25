@@ -8,7 +8,7 @@ protocol.registerSchemesAsPrivileged([
     { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
-let win, wins;
+let win, setting, room;
 async function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
@@ -17,7 +17,7 @@ async function createWindow() {
         height: 760,
         frame: false,
         backgroundColor: "#eee",
-        // resizable: false, //禁止自定义窗口尺寸
+        resizable: false, //禁止自定义窗口尺寸
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
         },
@@ -27,19 +27,15 @@ async function createWindow() {
     });
     win.setMenu(null);
     if (process.env.WEBPACK_DEV_SERVER_URL) {
-        // Load the url of the dev server if in development mode
-        console.log(process.env.WEBPACK_DEV_SERVER_URL);
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
         if (!process.env.IS_TEST) win.webContents.openDevTools();
     } else {
         createProtocol("app");
-        // Load the index.html when not in development
         win.loadURL("app://./index.html");
     }
 }
-
 async function createSettingWindow() {
-    wins = new BrowserWindow({
+    setting = new BrowserWindow({
         parent: win,
         modal: true,
         width: 700,
@@ -50,36 +46,35 @@ async function createSettingWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
         },
     });
-    wins.setMenu(null);
-    wins.webContents.openDevTools();
+    setting.setMenu(null);
+    setting.webContents.openDevTools();
     if (process.env.WEBPACK_DEV_SERVER_URL) {
-        await wins.loadURL("http://localhost:8080/#/setting");
+        await setting.loadURL("http://localhost:8080/#/setting");
     } else {
         createProtocol("app");
-        wins.loadURL("app://./index.html#setting");
+        setting.loadURL("app://./index.html#setting");
     }
 }
-// Quit when all windows are closed.
-app.on("window-all-closed", () => {
-    // On macOS it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== "darwin") {
-        app.quit();
+async function createRoomWindow() {
+    room = new BrowserWindow({
+        width: 1400,
+        // frame: false,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+        },
+    });
+    room.setMenu(null);
+    room.webContents.openDevTools();
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+        await room.loadURL("http://localhost:8080/#/room");
+    } else {
+        createProtocol("app");
+        room.loadURL("app://./index.html#room");
     }
-});
-
-app.on("activate", () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-});
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+}
 app.on("ready", async() => {
     if (isDevelopment && !process.env.IS_TEST) {
-        // Install Vue Devtools
         try {
             await installExtension(VUEJS_DEVTOOLS);
         } catch (e) {
@@ -90,11 +85,20 @@ app.on("ready", async() => {
     ipcMain.on("setting", function(event, arg) {
         createSettingWindow();
     });
+    ipcMain.on("createRoom", async function(event, arg) {
+        win.setFullScreen(true);
+    });
+    ipcMain.on("exitRoom", async function(event, arg) {
+        win.setFullScreen(false);
+    });
+    ipcMain.on("miniIndex", async function(event, arg) {
+        win.minimize();
+    });
     ipcMain.on("closeIndex", function(event, arg) {
         if (arg === "/") {
             win.destroy();
         } else if (arg === "others" || arg === "general" || arg === "sound") {
-            wins.destroy();
+            setting.destroy();
         }
     });
     ipcMain.on("login", function(event, arg) {
@@ -108,7 +112,6 @@ app.on("ready", async() => {
     });
 });
 
-// Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
     if (process.platform === "win32") {
         process.on("message", (data) => {
@@ -122,3 +125,12 @@ if (isDevelopment) {
         });
     }
 }
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+        app.quit();
+    }
+});
+
+app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
