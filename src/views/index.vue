@@ -43,13 +43,25 @@ export default {
   },
   data() {
     return {
-      roomJwt: "TjhofKvysZKk_9PFHkfMm",
+      roomJwt: "fbeWhNBfatHb-_2p0cswp",
     };
   },
+  created() {
+    /**
+     * @description 进入首页后 在vuex index.js中创建一个trtcCloud实例，在进行设置时使用
+     */
+    this.$store.commit("initTrtc");
+  },
   mounted() {
+    /**
+     * @description 进入房间room成功后的回调，并将userid等参数传至vuex中保存
+     */
     ipcRenderer.on("login_back", (event, arg) => {
       this.$store.commit("setLoginInfo", arg);
     });
+    /**
+     * @description 进入房间失败后的回调，调用log组件进行提示
+     */
     ipcRenderer.on("login_back_error", (event, arg) => {
       this.$refs.log.logInfo = {
         logText: "口令错误,请检查是否输入正确",
@@ -59,9 +71,15 @@ export default {
     });
   },
   methods: {
+    /**
+     * @description 打开dialog设置窗口
+     */
     setting() {
       ipcRenderer.send("setting");
     },
+    /**
+     * @description 进入房间room事件,同时开启overlay遮罩层
+     */
     enterRoom() {
       let reg = /[0123456789ABCDEFGHJKLMNOPQRSTUVWXYZ_abcdefghijkmnopqrstuvwxyz-]{21}/g;
       if (reg.test(this.roomJwt)) {

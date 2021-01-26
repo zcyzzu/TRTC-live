@@ -8,7 +8,9 @@
         color="success"
       ></v-progress-circular>
       {{ text }}
-      <v-btn v-if="reload">取消重试</v-btn>
+      <v-btn v-if="reload" color="error" @click="$store.commit('cancelOverlay')"
+        >取消重试</v-btn
+      >
     </v-overlay>
   </div>
 </template>

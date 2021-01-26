@@ -2,6 +2,7 @@
 import { app, protocol, BrowserWindow, ipcMain, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+
 const Axios = require("axios");
 const isDevelopment = process.env.NODE_ENV !== "production";
 protocol.registerSchemesAsPrivileged([
@@ -55,24 +56,6 @@ async function createSettingWindow() {
         setting.loadURL("app://./index.html#setting");
     }
 }
-async function createRoomWindow() {
-    room = new BrowserWindow({
-        width: 1400,
-        // frame: false,
-        height: 800,
-        webPreferences: {
-            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-        },
-    });
-    room.setMenu(null);
-    room.webContents.openDevTools();
-    if (process.env.WEBPACK_DEV_SERVER_URL) {
-        await room.loadURL("http://localhost:8080/#/room");
-    } else {
-        createProtocol("app");
-        room.loadURL("app://./index.html#room");
-    }
-}
 app.on("ready", async() => {
     if (isDevelopment && !process.env.IS_TEST) {
         try {
@@ -82,6 +65,12 @@ app.on("ready", async() => {
         }
     }
     createWindow();
+    ipcMain.on("newTrtcCloud", function(event, arg) {
+        console.log(arg, "arg");
+        let trtcCloud = "trtcCloud";
+        event.reply("newTrtcCloud_reply", trtcCloud);
+    });
+    //分割线分割线分割线分割线分割线分割线
     ipcMain.on("setting", function(event, arg) {
         createSettingWindow();
     });

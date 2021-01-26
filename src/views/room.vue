@@ -2,7 +2,14 @@
   <div>
     <titleBar></titleBar>
     <div id="power" class="d-flex  justify-space-around align-center">
-      <div>网络质量</div>
+      <div>
+        上行网络质量：
+        <v-btn color="success" small elevation="0">好</v-btn>
+        <br />
+        <br />
+        上行网络质量：
+        <v-btn color="success" small elevation="0">好</v-btn>
+      </div>
       <div>
         <v-btn icon>
           <v-icon x-large color="green">mdi-microphone</v-icon>
@@ -33,7 +40,6 @@ import {
 } from "trtc-electron-sdk/liteav/trtc_define";
 import { mapState } from "vuex";
 import log from "@/components/log";
-import TRTCCloud from "trtc-electron-sdk";
 import titleBar from "@/components/titleBar";
 import { ipcRenderer } from "electron";
 export default {
@@ -47,12 +53,10 @@ export default {
       anchorIdList: [], // 主播ID列表
       // 存放远程用户视频列表
       remoteVideos: {},
-      trtcCloud: "",
     };
   },
   mounted() {
     this.videoContainer = document.querySelector("#video-container");
-    this.trtcCloud = new TRTCCloud();
     this.trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
     this.trtcCloud.on(
       "onRemoteUserEnterRoom",
@@ -251,7 +255,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["userid", "roomid", "sdkappid", "usersig"]),
+    ...mapState(["userid", "roomid", "sdkappid", "usersig", "trtcCloud"]),
   },
 };
 </script>

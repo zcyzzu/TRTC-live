@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router";
 import { ipcRenderer } from "electron";
+import TRTCCloud from "trtc-electron-sdk";
 
 Vue.use(Vuex);
 
@@ -12,8 +13,12 @@ export default new Vuex.Store({
         sdkappid: "",
         usersig: "",
         overlay: false,
+        trtcCloud: "",
     },
     mutations: {
+        initTrtc(state) {
+            state.trtcCloud = new TRTCCloud();
+        },
         setLoginInfo(state, info) {
             state.userid = info.userid;
             state.roomid = info.roomid;
@@ -27,6 +32,9 @@ export default new Vuex.Store({
         },
         setOverlay(state) {
             state.overlay = true;
+        },
+        cancelOverlay(state) {
+            state.overlay = false;
         },
     },
     actions: {},
