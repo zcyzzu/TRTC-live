@@ -1,6 +1,5 @@
 <template>
   <div>
-    <titleBar></titleBar>
     <div id="leftBar">
       <div class="leftBarlist">
         <div
@@ -14,9 +13,6 @@
         </div>
       </div>
     </div>
-    <div id="rightContent">
-      <router-view></router-view>
-    </div>
   </div>
 </template>
 <script>
@@ -27,16 +23,25 @@ export default {
   },
   data: () => ({
     settingList: [
-      ["mdi-email", "常规设置", "/setting"],
-      ["mdi-microphone", "声音设置", "/setting/sound"],
-      ["mdi-code-braces", "其他设置", "/setting/others"],
+      ["mdi-email", "常规设置", "general"],
+      ["mdi-microphone", "声音设置", "sound"],
+      ["mdi-code-braces", "其他设置", "others"],
     ],
+    init_index: 0,
   }),
+  mounted() {
+    document
+      .querySelectorAll(".item")
+      [this.init_index].classList.add("selected");
+  },
   methods: {
     settingItems(index) {
-      this.$router.push({
-        path: this.settingList[index][2],
-      });
+      this.$emit("changeTab", this.settingList[index][2]);
+      document
+        .querySelectorAll(".item")
+        [this.init_index].classList.remove("selected");
+      document.querySelectorAll(".item")[index].classList.add("selected");
+      this.init_index = index;
     },
   },
 };
@@ -44,18 +49,11 @@ export default {
 <style lang="scss" scoped>
 #leftBar {
   position: absolute;
-  top: 41px;
+  top: 15px;
   left: 0;
   bottom: 0;
   width: 140px;
   border-right: 2px solid #eee;
-}
-#rightContent {
-  position: absolute;
-  top: 41px;
-  bottom: 0;
-  right: 0;
-  left: 140px;
 }
 .leftBarItem {
   width: 100%;
@@ -66,6 +64,9 @@ export default {
   transition: all 0.3s;
 }
 .item:hover {
+  background: #eee;
+}
+.selected {
   background: #eee;
 }
 </style>

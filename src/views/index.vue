@@ -14,32 +14,36 @@
       outlined
       class="px-6"
     ></v-text-field>
-    <v-row no-gutters>
+    <v-row no-gutters class="d-flex justify-center">
       <v-btn
         width="160"
         elevation="0"
         large
         @click="enterRoom"
         color="blue dark-1"
-        class="mx-auto white--text"
+        class=" white--text mr-4"
         >进入房间</v-btn
       >
+      <v-btn large elevation="0">扫码进入</v-btn>
     </v-row>
-    <v-btn text @click="setting">设置 </v-btn>
+    <v-btn text @click="setting">设置</v-btn>
     <log ref="log"></log>
     <overlay ref="overlay"></overlay>
+    <dialogs ref="dialogEle"></dialogs>
   </div>
 </template>
 <script>
 import titleBar from "@/components/titleBar";
 import overlay from "@/components/overlay";
 import log from "@/components/log";
+import dialogs from "@/components/dialog";
 import { ipcRenderer } from "electron";
 export default {
   components: {
     titleBar,
     log,
     overlay,
+    dialogs,
   },
   data() {
     return {
@@ -75,7 +79,9 @@ export default {
      * @description 打开dialog设置窗口
      */
     setting() {
-      ipcRenderer.send("setting");
+      // ipcRenderer.send("setting");
+      this.$refs.dialogEle.settingDailog = true;
+      console.log(this.$refs.dialogEle.settingDailog);
     },
     /**
      * @description 进入房间room事件,同时开启overlay遮罩层

@@ -14,8 +14,8 @@ async function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
         show: false,
-        width: 1410,
-        height: 760,
+        width: 1610,
+        height: 860,
         frame: false,
         backgroundColor: "#eee",
         resizable: false, //禁止自定义窗口尺寸
