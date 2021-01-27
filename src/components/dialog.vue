@@ -3,7 +3,11 @@
     <v-dialog v-model="settingDailog" max-width="700">
       <v-card width="700" height="600">
         <setting @changeTab="changeTab"></setting>
-        <component id="rightContent" :is="componentId"></component>
+        <component
+          id="rightContent"
+          :ref="componentId"
+          :is="componentId"
+        ></component>
       </v-card>
     </v-dialog>
   </div>
@@ -29,6 +33,18 @@ export default {
   methods: {
     changeTab(val) {
       this.componentId = val;
+      if (val === "sound") {
+        setTimeout(() => {
+          this.$refs.sound.init();
+        }, 0);
+      }
+    },
+  },
+  watch: {
+    settingDailog: function(newVal, oldVal) {
+      if (newVal && this.componentId === "sound") {
+        this.$refs.sound.init();
+      }
     },
   },
 };

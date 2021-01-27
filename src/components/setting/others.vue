@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>其他设置</h1>
+    <p>未完待续</p>
   </div>
 </template>
 <script>

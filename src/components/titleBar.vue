@@ -76,7 +76,7 @@ export default {
   }
 }
 #windowOperate_mini:hover {
-  background: greenyellow;
+  background: gray;
   .theme--light.v-icon {
     color: white;
   }

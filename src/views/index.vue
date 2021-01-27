@@ -1,32 +1,38 @@
 <template>
   <div class="index_box">
     <titleBar></titleBar>
-    <v-img
-      height="50"
-      width="50"
-      class="mx-auto mb-2"
-      src="../assets/logo.svg"
-    ></v-img>
-    <h4 class="text-center mb-4">直播啦</h4>
-    <v-text-field
-      label="输入直播口令"
-      v-model="roomJwt"
-      outlined
-      class="px-6"
-    ></v-text-field>
-    <v-row no-gutters class="d-flex justify-center">
-      <v-btn
-        width="160"
-        elevation="0"
-        large
-        @click="enterRoom"
-        color="blue dark-1"
-        class=" white--text mr-4"
-        >进入房间</v-btn
-      >
-      <v-btn large elevation="0">扫码进入</v-btn>
-    </v-row>
-    <v-btn text @click="setting">设置</v-btn>
+    <div id="login">
+      <v-img
+        height="50"
+        width="50"
+        class="mx-auto mb-2"
+        src="../assets/logo.svg"
+      ></v-img>
+      <h4 class="text-center mb-4 white--text">直播啦</h4>
+      <v-text-field
+        label="输入直播口令"
+        v-model="roomJwt"
+        solo
+        background-color="white"
+        hide-details=""
+        @keydown.enter="enterRoom"
+        class="px-6 mb-4 white--text"
+      ></v-text-field>
+      <v-row no-gutters class="d-flex justify-center">
+        <v-btn
+          width="160"
+          elevation="0"
+          large
+          @click="enterRoom"
+          color="blue dark-1"
+          class=" white--text mr-4"
+          >进入房间</v-btn
+        >
+      </v-row>
+      <v-btn text class="white--text">扫码</v-btn>
+      <v-btn text class="white--text">设置</v-btn>
+    </div>
+
     <log ref="log"></log>
     <overlay ref="overlay"></overlay>
     <dialogs ref="dialogEle"></dialogs>
@@ -81,7 +87,6 @@ export default {
     setting() {
       // ipcRenderer.send("setting");
       this.$refs.dialogEle.settingDailog = true;
-      console.log(this.$refs.dialogEle.settingDailog);
     },
     /**
      * @description 进入房间room事件,同时开启overlay遮罩层
@@ -108,5 +113,18 @@ export default {
 <style lang="scss" scoped>
 .index_box {
   height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)),
+    url(../assets/login-bg.jpg);
+  background-size: 100% 100%;
+  position: relative;
+}
+#login {
+  height: 250px;
+  width: 500px;
+  position: absolute;
+  top: 50%;
+  margin-top: -125px;
+  left: 50%;
+  margin-left: -250px;
 }
 </style>
