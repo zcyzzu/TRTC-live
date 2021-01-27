@@ -24,6 +24,7 @@ export default {
     };
   },
   mounted() {
+    //测试
     console.log(this.trtcCloud.getMicDevicesList());
     console.log(this.trtcCloud.getSpeakerDevicesList());
     // console.log(this.trtcCloud.getCurrentMicDeviceVolume());
