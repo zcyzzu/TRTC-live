@@ -8,8 +8,14 @@
           @click="settingItems(index)"
           class="item d-flex  align-center px-4 py-2"
         >
-          <v-icon class="mr-4" small>{{ ele[0] }}</v-icon>
-          <span class="text-subtitle-2">{{ ele[1] }}</span>
+          <div id="step2" v-if="index === 1" data-intro="123456789">
+            <v-icon class="mr-4" small>{{ ele[0] }}</v-icon>
+            <span class="text-subtitle-2">{{ ele[1] }}</span>
+          </div>
+          <div v-else>
+            <v-icon class="mr-4" small>{{ ele[0] }}</v-icon>
+            <span class="text-subtitle-2">{{ ele[1] }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -17,6 +23,8 @@
 </template>
 <script>
 import titleBar from "@/components/titleBar";
+import intro_setting_leftBar from "../common/intro_setting_leftBar";
+import "intro.js/introjs.css";
 export default {
   components: {
     titleBar,
@@ -30,9 +38,18 @@ export default {
     init_index: 0,
   }),
   mounted() {
-    document
-      .querySelectorAll(".item")
-      [this.init_index].classList.add("selected");
+    let domInterval = setInterval(() => {
+      if (document != null) {
+        intro_setting_leftBar.start();
+        document
+          .querySelectorAll(".item")
+          [this.init_index].classList.add("selected");
+        console.log("ok");
+        clearInterval(domInterval);
+      } else {
+        console.log("no", document);
+      }
+    }, 1);
   },
   methods: {
     settingItems(index) {

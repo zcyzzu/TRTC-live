@@ -4,20 +4,30 @@
     <div id="power" class="d-flex  justify-space-around align-center">
       <div>
         上行网络质量：
-        <v-btn color="success" small elevation="0">好</v-btn>
+        <v-btn :color="localNetworkQuality.color" small elevation="0">{{
+          localNetworkQuality.text
+        }}</v-btn>
         <br />
         <br />
         上行网络质量：
-        <v-btn color="success" small elevation="0">好</v-btn>
+        <v-btn :color="remoteNetworkQuality.color" small elevation="0">{{
+          remoteNetworkQuality.text
+        }}</v-btn>
       </div>
       <div>
-        <v-btn icon>
-          <v-icon x-large color="green">mdi-microphone</v-icon>
+        <v-btn icon @click="toggleMic">
+          <v-icon x-large v-if="micStatus === true" color="green"
+            >mdi-microphone</v-icon
+          >
+          <v-icon x-large v-else color="gray">mdi-microphone</v-icon>
         </v-btn>
       </div>
       <div>
-        <v-btn icon>
-          <v-icon x-large color="green">mdi-volume-high</v-icon>
+        <v-btn icon @click="toggleVol">
+          <v-icon x-large v-if="speakerStatus === false" color="green"
+            >mdi-volume-high</v-icon
+          >
+          <v-icon x-large v-else color="gray">mdi-volume-high</v-icon>
         </v-btn>
       </div>
       <div>
@@ -40,8 +50,9 @@ import {
 } from "trtc-electron-sdk/liteav/trtc_define";
 import { mapState } from "vuex";
 import log from "@/components/log";
-import titleBar from "@/components/titleBar";
 import { ipcRenderer } from "electron";
+import titleBar from "@/components/titleBar";
+import { networkQualityEnumMapper } from "../common/qualityColorMapper";
 export default {
   components: {
     titleBar,
@@ -49,13 +60,25 @@ export default {
   },
   data() {
     return {
+      micStatus: false,
+      speakerStatus: false,
       videoContainer: null,
       anchorIdList: [], // 主播ID列表
       // 存放远程用户视频列表
       remoteVideos: {},
+      localNetworkQuality: {
+        text: "很好",
+        color: "green",
+      },
+      remoteNetworkQuality: {
+        text: "很好",
+        color: "green",
+      },
     };
   },
   mounted() {
+    this.micStatus = this.trtcCloud.getCurrentMicDeviceMute();
+    this.speakerStatus = this.trtcCloud.getCurrentSpeakerDeviceMute();
     this.videoContainer = document.querySelector("#video-container");
     this.trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
     this.trtcCloud.on(
@@ -84,14 +107,36 @@ export default {
     this.trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
   },
   methods: {
+    toggleMic() {
+      if (this.trtcCloud.getCurrentMicDeviceMute()) {
+        this.trtcCloud.setCurrentMicDeviceMute(false);
+        this.micStatus = false;
+      } else {
+        this.trtcCloud.setCurrentMicDeviceMute(true);
+        this.micStatus = true;
+      }
+    },
+    toggleVol() {
+      if (this.trtcCloud.getCurrentSpeakerDeviceMute()) {
+        this.trtcCloud.setCurrentSpeakerDeviceMute(false);
+        this.speakerStatus = false;
+      } else {
+        this.trtcCloud.setCurrentSpeakerDeviceMute(true);
+        this.speakerStatus = true;
+      }
+    },
     onNetworkQuality(localQuality, remoteQuality) {
-      console.log(localQuality, remoteQuality, "网络质量");
+      this.localNetworkQuality = networkQualityEnumMapper(localQuality.quality);
+      this.remoteNetworkQuality = networkQualityEnumMapper(
+        remoteQuality[0].quality
+      );
     },
     /**
      * 当进入房间时触发的回调
      * @param {number} result - 进房结果， 大于 0 时，为进房间消耗的时间，这表示进进房成功。如果为 -1 ，则表示进房失败。
      **/
     onEnterRoom(result) {
+      //todo
       if (result > 0) {
         this.log(`进房成功，使用了 ${result} 毫秒`, "success");
         // this.startNoAnchorCountDown();
@@ -112,6 +157,7 @@ export default {
      * 视频元素自动换行排版
      */
     videoTypeSettingAutoWrap() {
+      //todo
       let maxPerline = 2; // 每行最多放三个
       let remoteVideos = this.remoteVideos;
       let winWidth = 100; // 窗口宽度，百分比值
@@ -154,6 +200,7 @@ export default {
      * @param {number} uid
      */
     closeAnchorVideo(uid) {
+      //todo
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
       let view = document.getElementById(id);
       if (view) {
@@ -167,6 +214,7 @@ export default {
      * 当主播退房时，把主播ID 从列表中去除，并返回列表的长度
      */
     anchorOut(uid) {
+      //todo
       let idx = this.anchorIdList.indexOf(uid);
       this.anchorIdList.splice(idx, 1);
       return this.anchorIdList.length;
@@ -175,6 +223,7 @@ export default {
      * 当主播进入本房间
      */
     onRemoteUserEnterRoom(uid) {
+      //todo
       if (!this.anchorIdList.includes(uid)) {
         this.anchorIdList.push(uid);
         this.log(`主播 ${uid}，进入房间。`, "success");
@@ -184,6 +233,7 @@ export default {
      * 当主播退出本房间
      */
     onRemoteUserLeaveRoom(uid) {
+      //todo
       this.closeAnchorVideo(uid);
       if (this.anchorOut(uid) === 0) {
         this.log(`主播 ${uid},离开房间`, "warning");
@@ -194,6 +244,7 @@ export default {
      * 当远程用户屏幕分享的状态发生变化
      **/
     onUserSubStreamAvailable(uid, available) {
+      //todo
       if (available) {
         this.showRemoteScreenSharing(uid);
       } else {
@@ -204,6 +255,7 @@ export default {
      * 显示远程用户的屏幕分享
      */
     showRemoteScreenSharing(uid) {
+      //todo
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeSub}`;
       let W = this.subStreamWidth;
       let H = this.subStreamHeight;
@@ -216,7 +268,11 @@ export default {
         this.videoContainer.appendChild(view);
       }
       this.remoteVideos[id] = view;
-      this.trtcCloud.startRemoteSubStreamView(uid, view);
+      this.trtcCloud.startRemoteView(
+        uid,
+        view,
+        TRTCVideoStreamType.TRTCVideoStreamTypeSub
+      );
       this.trtcCloud.setRemoteSubStreamViewFillMode(
         uid,
         TRTCVideoFillMode.TRTCVideoFillMode_Fit
@@ -229,6 +285,7 @@ export default {
      * @param {*} uid
      */
     closeRemoteScreenSharing(uid) {
+      //todo
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeSub}`;
       let view = document.getElementById(id);
       if (view) {
@@ -260,14 +317,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-// #video-container {
-//   height: 500px;
-//   width: 500px;
-// }
-// .anchor-view {
-//   width: 500px;
-//   height: 500px;
-// }
 #power {
   position: fixed;
   left: 0;

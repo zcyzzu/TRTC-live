@@ -43,7 +43,9 @@ export default {
   watch: {
     settingDailog: function(newVal, oldVal) {
       if (newVal && this.componentId === "sound") {
-        this.$refs.sound.init();
+        setTimeout(() => {
+          this.$refs.sound.init();
+        }, 0);
       }
     },
   },

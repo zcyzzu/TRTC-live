@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center">
+      <v-col class="px-6 d-flex  align-center" data-intro="1">
         <span class="spanName">麦克风：</span>
         <v-select
           outlined
@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center">
+      <v-col class="px-6 d-flex  align-center" data-intro="2">
         <span class="spanName">扬声器：</span>
         <v-select
           outlined
@@ -27,7 +27,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center">
+      <v-col class="px-6 d-flex  align-center" data-intro="3">
         <span class="spanName_long">麦克风音量：</span>
         <v-progress-linear
           v-model="micVol"
@@ -40,7 +40,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center">
+      <v-col class="px-6 d-flex  align-center" data-intro="4">
         <span class="spanName_long">扬声器音量：</span>
         <v-progress-linear
           v-model="speakerVol"
@@ -53,7 +53,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters>
-      <v-col class="px-6 d-flex align-center">
+      <v-col class="px-6 d-flex align-center" data-intro="5">
         <span class="spanName">麦克风测试：</span>
         <v-btn class="mr-6" @click="startTestMic">启动测试</v-btn>
         <v-btn @click="stopTestMic">停止测试</v-btn>
@@ -63,7 +63,7 @@
       <v-progress-linear :value="micProgress"></v-progress-linear>
     </v-row>
     <v-row no-gutters>
-      <v-col class="px-6 d-flex align-center">
+      <v-col class="px-6 d-flex align-center" data-intro="6">
         <span class="spanName">扬声器测试：</span>
         <v-btn @click="startTestSpeaker" class="mr-6">启动测试</v-btn>
         <v-btn @click="stopTestSpeaker">停止测试</v-btn>
@@ -79,6 +79,7 @@
 import { mapState } from "vuex";
 import log from "@/components/log";
 import { AudioMusicParam } from "trtc-electron-sdk";
+import introJs from "intro.js";
 export default {
   components: {
     log,
@@ -101,6 +102,9 @@ export default {
     this.trtcCloud.on("onTestMicVolume", (volume) => {
       this.micProgress = volume;
     });
+    introJs()
+      .start()
+      .nextStep();
   },
   methods: {
     micChange(e) {
@@ -113,7 +117,6 @@ export default {
     speakerChange(e) {
       this.speakerList.forEach((ele, index) => {
         if (e === ele) {
-          console.log(this.speakerList[1][index]);
           this.trtcCloud.setCurrentSpeakerDevice(this.speakerList[1][index]);
         }
       });
@@ -122,7 +125,6 @@ export default {
       this.trtcCloud.setCurrentMicDeviceVolume(Math.ceil(e));
     },
     speakerVolChange(e) {
-      console.log(Math.ceil(e));
       this.trtcCloud.setCurrentSpeakerVolume(Math.ceil(e));
     },
     init() {

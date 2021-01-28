@@ -1,4 +1,5 @@
 "use strict";
+const electron = require("electron");
 import { app, protocol, BrowserWindow, ipcMain, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -9,7 +10,7 @@ protocol.registerSchemesAsPrivileged([
     { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
-let win, setting, room;
+let win, qrcode;
 async function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
@@ -35,27 +36,6 @@ async function createWindow() {
         win.loadURL("app://./index.html");
     }
 }
-async function createSettingWindow() {
-    setting = new BrowserWindow({
-        parent: win,
-        modal: true,
-        width: 700,
-        frame: false,
-        // resizable: false, //禁止自定义窗口尺寸
-        height: 600,
-        webPreferences: {
-            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-        },
-    });
-    setting.setMenu(null);
-    setting.webContents.openDevTools();
-    if (process.env.WEBPACK_DEV_SERVER_URL) {
-        await setting.loadURL("http://localhost:8080/#/setting");
-    } else {
-        createProtocol("app");
-        setting.loadURL("app://./index.html#setting");
-    }
-}
 app.on("ready", async() => {
     if (isDevelopment && !process.env.IS_TEST) {
         try {
@@ -65,15 +45,6 @@ app.on("ready", async() => {
         }
     }
     createWindow();
-    ipcMain.on("newTrtcCloud", function(event, arg) {
-        console.log(arg, "arg");
-        let trtcCloud = "trtcCloud";
-        event.reply("newTrtcCloud_reply", trtcCloud);
-    });
-    //分割线分割线分割线分割线分割线分割线
-    ipcMain.on("setting", function(event, arg) {
-        createSettingWindow();
-    });
     ipcMain.on("createRoom", async function(event, arg) {
         win.setFullScreen(true);
     });
@@ -84,11 +55,7 @@ app.on("ready", async() => {
         win.minimize();
     });
     ipcMain.on("closeIndex", function(event, arg) {
-        if (arg === "/") {
-            win.destroy();
-        } else if (arg === "others" || arg === "general" || arg === "sound") {
-            setting.destroy();
-        }
+        win.destroy();
     });
     ipcMain.on("login", function(event, arg) {
         Axios.get(arg)
@@ -98,6 +65,32 @@ app.on("ready", async() => {
             .catch((err) => {
                 event.reply("login_back_error", err);
             });
+    });
+    let displays = electron.screen.getAllDisplays(); //获取所有显示器数组
+    ipcMain.on("sendXY", function(
+        event,
+        width_x,
+        height_y,
+        windows_x,
+        windows_y,
+        display_num
+    ) {
+        qrcode = new BrowserWindow({
+            width: Number(width_x) + 1,
+            height: Number(height_y) + 1,
+            frame: false, //无框
+            transparent: true, //透明
+            x: Number(windows_x) + displays[display_num].bounds.x,
+            y: Number(windows_y),
+        });
+        qrcode.loadURL(
+            `file://E:/work/daoshicloud-live-electron/qrcode_border.html`
+        );
+        // qrcode.loadURL(`file://${__dirname}/qrcode_border.html`);
+        setTimeout(() => {
+            event.reply("sendXY_back", false);
+            qrcode.destroy();
+        }, 1500);
     });
 });
 

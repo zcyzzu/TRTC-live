@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row no-gutters style="position:relative" id="titleBar">
+    <v-row no-gutters id="titleBar">
       <v-img
         src="../assets/logo.svg"
         class="ma-2"
@@ -12,7 +12,6 @@
       </div>
       <div
         id="windowOperate_mini"
-        v-if="href === '#/' || href === '#/room'"
         @click="miniIndex"
         class="d-flex align-center pa-2 mr-8"
       >
@@ -31,28 +30,13 @@
 <script>
 import { ipcRenderer } from "electron";
 export default {
-  data() {
-    return {
-      href: "",
-    };
-  },
   methods: {
     closeIndex() {
-      let hashArr = window.location.hash.split("/");
-      if (hashArr[1] == "setting" && hashArr.length === 3) {
-        ipcRenderer.send("closeIndex", hashArr[2]);
-      } else if (hashArr[1] == "setting" && hashArr.length === 2) {
-        ipcRenderer.send("closeIndex", "general");
-      } else if (hashArr[1] == "") {
-        ipcRenderer.send("closeIndex", "/");
-      }
+      ipcRenderer.send("closeIndex", "/");
     },
     miniIndex() {
       ipcRenderer.send("miniIndex");
     },
-  },
-  mounted() {
-    this.href = window.location.hash;
   },
 };
 </script>
@@ -60,6 +44,8 @@ export default {
 #titleBar {
   -webkit-app-region: drag;
   -webkit-user-select: none;
+  position: relative;
+  background: #eee;
 }
 #windowOperate_mini,
 #windowOperate_close {

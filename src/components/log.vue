@@ -40,7 +40,7 @@ export default {
 }
 #log {
   position: fixed;
-  top: 25px;
+  top: 40px;
   left: 50%;
   margin-left: -200px;
 }
