@@ -39,7 +39,7 @@ export default {
   }),
   mounted() {
     let domInterval = setInterval(() => {
-      if (document != null) {
+      if (document.querySelector("#step2") != null) {
         intro_setting_leftBar.start();
         document
           .querySelectorAll(".item")
