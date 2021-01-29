@@ -7,6 +7,7 @@ import "@babel/polyfill";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import "./common/assets.css";
+import "driver.js/dist/driver.min.css";
 
 Vue.config.productionTip = false;
 

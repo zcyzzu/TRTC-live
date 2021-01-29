@@ -8,7 +8,7 @@
           @click="settingItems(index)"
           class="item d-flex  align-center px-4 py-2"
         >
-          <div id="step2" v-if="index === 1" data-intro="123456789">
+          <div id="step2" v-if="index === 1">
             <v-icon class="mr-4" small>{{ ele[0] }}</v-icon>
             <span class="text-subtitle-2">{{ ele[1] }}</span>
           </div>
@@ -22,9 +22,8 @@
   </div>
 </template>
 <script>
+import Driver from "driver.js";
 import titleBar from "@/components/titleBar";
-import intro_setting_leftBar from "../common/intro_setting_leftBar";
-import "intro.js/introjs.css";
 export default {
   components: {
     titleBar,
@@ -33,25 +32,51 @@ export default {
     settingList: [
       ["mdi-email", "常规设置", "general"],
       ["mdi-microphone", "声音设置", "sound"],
-      ["mdi-code-braces", "其他设置", "others"],
+      // ["mdi-code-braces", "其他设置", "others"],
     ],
     init_index: 0,
   }),
   mounted() {
-    let domInterval = setInterval(() => {
-      if (document.querySelector("#step2") != null) {
-        intro_setting_leftBar.start();
-        document
-          .querySelectorAll(".item")
-          [this.init_index].classList.add("selected");
-        console.log("ok");
-        clearInterval(domInterval);
-      } else {
-        console.log("no", document);
+    document
+      .querySelectorAll(".item")
+      [this.init_index].classList.add("selected");
+
+    /**
+     * @description 设置界面的引导页 打开之前判断isDriverStatus状态
+     */
+    setTimeout(() => {
+      const driver = new Driver({
+        allowClose: false,
+        keyboardControl: false,
+        opacity: 0,
+      });
+      driver.defineSteps([
+        {
+          element: "#step2",
+          closeBtnText: "确定",
+          popover: {
+            title: "声音设置",
+            description:
+              "主要是对此设备扬声器和麦克风进行设置,点击确定进行下一步！",
+          },
+          onDeselected: () => {
+            this.settingItems(1);
+          },
+        },
+      ]);
+      if (!window.localStorage.getItem("isDriverStatus")) {
+        driver.start();
       }
-    }, 1);
+      let highlighted = document.getElementById(
+        "driver-highlighted-element-stage"
+      );
+      highlighted.style.cssText = "z-index:1000!important;";
+    }, 300);
   },
   methods: {
+    /**
+     * @description
+     */
     settingItems(index) {
       this.$emit("changeTab", this.settingList[index][2]);
       document

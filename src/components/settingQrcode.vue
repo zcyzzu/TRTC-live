@@ -63,8 +63,11 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description 对所有屏幕进行截图 根据截图的个数 判断是否有扩展屏幕
+     * 若有扩展屏幕 改变isScreenLength状态  以dialog的形式询问要扫描具体哪一个屏幕
+     */
     startTest() {
-      //开始检测即截图
       this.settingQrcode = false;
       desktopCapturer
         .getSources({
@@ -92,6 +95,10 @@ export default {
           };
         });
     },
+    /**
+     * @description 根据拿到的截图进行格式转换
+     * @param {png} val
+     */
     startScan(val) {
       this.$refs.log.logInfo = {
         logText: "正在扫描二维码，请稍后",
@@ -105,7 +112,9 @@ export default {
       let file = blobToFile(blob);
       this.imgToCanvas(base_64, file);
     },
-    // 把image 转换为 canvas对象,拿到imageData 传给jsQR
+    /**
+     * @description  把image 转换为 canvas对象,拿到imageData 传给jsQR
+     */
     imgToCanvas(images, file) {
       let that = this;
       let imgFile = new FileReader();

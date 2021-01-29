@@ -12,13 +12,19 @@ export default new Vuex.Store({
         roomid: "",
         sdkappid: "",
         usersig: "",
-        overlay: false,
-        trtcCloud: "",
+        overlay: false, //控制遮罩层的状态 (主要是进入房间时)
+        trtcCloud: "", //trtc实例
     },
     mutations: {
+        /**
+         * @description trtc实例化 在首页created钩子中执行
+         */
         initTrtc(state) {
             state.trtcCloud = new TRTCCloud();
         },
+        /**
+         * @description 请求房间口令后执行 保存房间相关的参数 并且进入房间
+         */
         setLoginInfo(state, info) {
             state.userid = info.userid;
             state.roomid = info.roomid;
@@ -30,6 +36,9 @@ export default new Vuex.Store({
                 path: "/room",
             });
         },
+        /**
+         * @description 更改遮罩层状态
+         */
         setOverlay(state) {
             state.overlay = true;
         },

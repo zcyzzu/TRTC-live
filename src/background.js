@@ -3,7 +3,6 @@ const electron = require("electron");
 import { app, protocol, BrowserWindow, ipcMain, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-
 const Axios = require("axios");
 const isDevelopment = process.env.NODE_ENV !== "production";
 protocol.registerSchemesAsPrivileged([
@@ -15,11 +14,11 @@ async function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
         show: false,
-        width: 1610,
-        height: 860,
+        width: 1200,
+        height: 800,
         frame: false,
         backgroundColor: "#eee",
-        // resizable: false, //禁止自定义窗口尺寸
+        resizable: false, //禁止自定义窗口尺寸
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
         },

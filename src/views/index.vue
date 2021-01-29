@@ -30,15 +30,7 @@
         >
       </v-row>
       <v-btn text @click="qrcode" class="white--text">扫码</v-btn>
-      <v-btn
-        text
-        id="step1"
-        @click="setting"
-        class="white--text"
-        data-intro="Hello step one!"
-        data-title="title"
-        >设置</v-btn
-      >
+      <v-btn text id="step1" @click="setting" class="white--text">设置</v-btn>
     </div>
     <log ref="log"></log>
     <overlay ref="overlay"></overlay>
@@ -56,9 +48,8 @@ import overlay from "@/components/overlay";
 import log from "@/components/log";
 import dialogs from "@/components/dialog";
 import { ipcRenderer } from "electron";
-import intro from "../common/intro";
 import settingQrcode from "@/components/settingQrcode.vue";
-import "intro.js/introjs.css";
+import Driver from "driver.js";
 export default {
   components: {
     titleBar,
@@ -69,21 +60,24 @@ export default {
   },
   data() {
     return {
-      roomJwt: "ghA7MShm0cAZjaxEwAMFF",
+      roomJwt: "S8fCJae69zkBukaaETxdr",
     };
   },
   created() {
     /**
-     * @description 进入首页后 在vuex index.js中创建一个trtcCloud实例，在进行设置时使用
+     * @description 进入首页后 在vuex index.js中创建一个trtcCloud实例，在进行设置及后续使用
      */
     this.$store.commit("initTrtc");
   },
   mounted() {
-    intro
-      .onexit(() => {
-        this.$refs.dialogEle.settingDailog = true;
-      })
-      .start();
+    /**
+     * @description 判断是不是第一次打开此软件 根据结果判断是否执行引导页
+     */
+    setTimeout(() => {
+      if (!window.localStorage.getItem("isDriverStatus")) {
+        this.indexDriver();
+      }
+    }, 200);
     /**
      * @description 进入房间room成功后的回调，并将userid等参数传至vuex中保存
      */
@@ -103,9 +97,43 @@ export default {
     });
   },
   methods: {
+    /**
+     * @description 首页执行引导组件  提示进行声音设置 此时强制点击下一步（确定）打开设置dialog
+     */
+    indexDriver() {
+      const driver = new Driver({
+        allowClose: false,
+        keyboardControl: false,
+        opacity: 0,
+      });
+      driver.defineSteps([
+        {
+          element: "#step1",
+          closeBtnText: "确定",
+          popover: {
+            title: "初次引导",
+            description: "首次进入房间前，请进行设置，点击确定进行下一步！",
+          },
+          onDeselected: () => {
+            this.$refs.dialogEle.settingDailog = true;
+          },
+        },
+      ]);
+      driver.start();
+      let highlighted = document.getElementById(
+        "driver-highlighted-element-stage"
+      );
+      highlighted.style.cssText = "opacity:0;z-index:1000!important;";
+    },
+    /**
+     * @description 设置从桌面二维码中读取到的房间口令
+     */
     setRoomJwt(val) {
       this.roomJwt = val;
     },
+    /**
+     * @description 打开扫描桌面二维码dialog
+     */
     qrcode() {
       this.$refs.settingQrcode.settingQrcode = true;
     },

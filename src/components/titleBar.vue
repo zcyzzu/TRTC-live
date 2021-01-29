@@ -31,9 +31,15 @@
 import { ipcRenderer } from "electron";
 export default {
   methods: {
+    /**
+     * @description 模拟关闭按钮功能
+     */
     closeIndex() {
       ipcRenderer.send("closeIndex", "/");
     },
+    /**
+     * @description 模拟最小化按钮功能
+     */
     miniIndex() {
       ipcRenderer.send("miniIndex");
     },
@@ -45,7 +51,7 @@ export default {
   -webkit-app-region: drag;
   -webkit-user-select: none;
   position: relative;
-  background: #eee;
+  background: #e1f5fe;
 }
 #windowOperate_mini,
 #windowOperate_close {

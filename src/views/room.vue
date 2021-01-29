@@ -9,17 +9,17 @@
         }}</v-btn>
         <br />
         <br />
-        上行网络质量：
+        下行网络质量：
         <v-btn :color="remoteNetworkQuality.color" small elevation="0">{{
           remoteNetworkQuality.text
         }}</v-btn>
       </div>
       <div>
         <v-btn icon @click="toggleMic">
-          <v-icon x-large v-if="micStatus === true" color="green"
+          <v-icon x-large v-if="micStatus === false" color="green"
             >mdi-microphone</v-icon
           >
-          <v-icon x-large v-else color="gray">mdi-microphone</v-icon>
+          <v-icon x-large v-else color="red">mdi-microphone</v-icon>
         </v-btn>
       </div>
       <div>
@@ -27,7 +27,7 @@
           <v-icon x-large v-if="speakerStatus === false" color="green"
             >mdi-volume-high</v-icon
           >
-          <v-icon x-large v-else color="gray">mdi-volume-high</v-icon>
+          <v-icon x-large v-else color="red">mdi-volume-high</v-icon>
         </v-btn>
       </div>
       <div>
@@ -47,6 +47,7 @@ import {
   TRTCVideoFillMode,
   TRTCRoleType,
   TRTCParams,
+  TRTCAudioQuality,
 } from "trtc-electron-sdk/liteav/trtc_define";
 import { mapState } from "vuex";
 import log from "@/components/log";
@@ -64,8 +65,7 @@ export default {
       speakerStatus: false,
       videoContainer: null,
       anchorIdList: [], // 主播ID列表
-      // 存放远程用户视频列表
-      remoteVideos: {},
+      remoteVideos: {}, // 存放远程用户视频列表
       localNetworkQuality: {
         text: "很好",
         color: "green",
@@ -76,46 +76,72 @@ export default {
       },
     };
   },
-  mounted() {
+  created() {
+    /**
+     * @description 获取当前机器麦克风和扬声器的状态 即打开还是关闭 以此状态来更新底部mic/speaker图标状态
+     */
     this.micStatus = this.trtcCloud.getCurrentMicDeviceMute();
     this.speakerStatus = this.trtcCloud.getCurrentSpeakerDeviceMute();
-    this.videoContainer = document.querySelector("#video-container");
-    this.trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
-    this.trtcCloud.on(
-      "onRemoteUserEnterRoom",
-      this.onRemoteUserEnterRoom.bind(this)
-    );
-    this.trtcCloud.on(
-      "onRemoteUserLeaveRoom",
-      this.onRemoteUserLeaveRoom.bind(this)
-    );
-    this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
-    this.trtcCloud.on(
-      "onUserSubStreamAvailable",
-      this.onUserSubStreamAvailable.bind(this)
-    );
-    // 5. 进入房间
-    // TRTCParams 详细说明，请查看文档：https://trtc-1252463788.file.myqcloud.com/electron_sdk/docs/TRTCParams.html
-    let param = new TRTCParams();
-    param.sdkAppId = parseInt(this.sdkappid);
-    param.userSig = String(this.usersig);
-    param.roomId = parseInt(this.roomid);
-    param.userId = String(this.userid);
-    param.privateMapKey = ""; // 房间签名（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
-    param.businessInfo = ""; // 业务数据（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
-    param.role = TRTCRoleType.TRTCRoleAudience; // 直播场景下的角色，仅适用于直播场景（TRTCAppSceneLIVE 和 TRTCAppSceneVoiceChatRoom），视频通话场景下指定无效。默认值：主播（TRTCRoleAnchor）
-    this.trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
+  },
+  mounted() {
+    this.$nextTick(() => {
+      /**
+       * @description 获取承载直播画面的容器
+       */
+      this.videoContainer = document.querySelector("#video-container");
+      this.trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
+      this.trtcCloud.on(
+        "onRemoteUserEnterRoom",
+        this.onRemoteUserEnterRoom.bind(this)
+      );
+      this.trtcCloud.on(
+        "onRemoteUserLeaveRoom",
+        this.onRemoteUserLeaveRoom.bind(this)
+      );
+      this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
+      this.trtcCloud.on(
+        "onUserSubStreamAvailable",
+        this.onUserSubStreamAvailable.bind(this)
+      );
+      this.trtcCloud.on(
+        "onSendFirstLocalAudioFrame",
+        this.onSendFirstLocalAudioFrame.bind(this)
+      );
+      let param = new TRTCParams();
+      param.sdkAppId = parseInt(this.sdkappid);
+      param.userSig = String(this.usersig);
+      param.roomId = parseInt(this.roomid);
+      param.userId = String(this.userid);
+      param.privateMapKey = ""; // 房间签名（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
+      param.businessInfo = ""; // 业务数据（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
+      param.role = TRTCRoleType.TRTCRoleAudience; // 直播场景下的角色，仅适用于直播场景（TRTCAppSceneLIVE 和 TRTCAppSceneVoiceChatRoom），视频通话场景下指定无效。默认值：主播（TRTCRoleAnchor）
+      this.trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
+      this.trtcCloud.startLocalAudio();
+      // this.trtcCloud.muteLocalAudio(true);
+      // let exdom = document.createElement("div");
+      // this.trtcCloud.startLocalPreview(exdom);
+    });
   },
   methods: {
+    onSendFirstLocalAudioFrame() {
+      console.log("首帧本地音频数据已经被送出");
+    },
+    /**
+     * @description 切换底部麦克风状态（打开/关闭）
+     */
     toggleMic() {
       if (this.trtcCloud.getCurrentMicDeviceMute()) {
         this.trtcCloud.setCurrentMicDeviceMute(false);
         this.micStatus = false;
       } else {
         this.trtcCloud.setCurrentMicDeviceMute(true);
+        // this.trtcCloud.muteLocalAudio(true);
         this.micStatus = true;
       }
     },
+    /**
+     * @description  切换底部扬声器状态（打开/关闭)
+     */
     toggleVol() {
       if (this.trtcCloud.getCurrentSpeakerDeviceMute()) {
         this.trtcCloud.setCurrentSpeakerDeviceMute(false);
@@ -125,6 +151,11 @@ export default {
         this.speakerStatus = true;
       }
     },
+    /**
+     * @description 上下行网络质量监控回调（每2秒触发一次）
+     * @param {any} localQuality 上行网络质量
+     * @param {any} remoteQuality 下行网络质量
+     */
     onNetworkQuality(localQuality, remoteQuality) {
       this.localNetworkQuality = networkQualityEnumMapper(localQuality.quality);
       this.remoteNetworkQuality = networkQualityEnumMapper(
@@ -136,10 +167,8 @@ export default {
      * @param {number} result - 进房结果， 大于 0 时，为进房间消耗的时间，这表示进进房成功。如果为 -1 ，则表示进房失败。
      **/
     onEnterRoom(result) {
-      //todo
       if (result > 0) {
         this.log(`进房成功，使用了 ${result} 毫秒`, "success");
-        // this.startNoAnchorCountDown();
       } else {
         this.log(`进房失败 ${result}`, "error");
       }
@@ -157,7 +186,6 @@ export default {
      * 视频元素自动换行排版
      */
     videoTypeSettingAutoWrap() {
-      //todo
       let maxPerline = 2; // 每行最多放三个
       let remoteVideos = this.remoteVideos;
       let winWidth = 100; // 窗口宽度，百分比值
@@ -200,7 +228,6 @@ export default {
      * @param {number} uid
      */
     closeAnchorVideo(uid) {
-      //todo
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
       let view = document.getElementById(id);
       if (view) {
@@ -214,7 +241,6 @@ export default {
      * 当主播退房时，把主播ID 从列表中去除，并返回列表的长度
      */
     anchorOut(uid) {
-      //todo
       let idx = this.anchorIdList.indexOf(uid);
       this.anchorIdList.splice(idx, 1);
       return this.anchorIdList.length;
@@ -223,28 +249,27 @@ export default {
      * 当主播进入本房间
      */
     onRemoteUserEnterRoom(uid) {
-      //todo
       if (!this.anchorIdList.includes(uid)) {
         this.anchorIdList.push(uid);
-        this.log(`主播 ${uid}，进入房间。`, "success");
+        this.log(`讲师已进入房间。`, "success");
+        this.trtcCloud.setCurrentMicDeviceMute(this.micStatus);
+        this.trtcCloud.setCurrentSpeakerDeviceMute(this.speakerStatus);
       }
     },
     /**
      * 当主播退出本房间
      */
     onRemoteUserLeaveRoom(uid) {
-      //todo
       this.closeAnchorVideo(uid);
       if (this.anchorOut(uid) === 0) {
-        this.log(`主播 ${uid},离开房间`, "warning");
+        this.log(`讲师离开房间`, "warning");
       }
-      this.log(`主播 ${uid},离开房间`, "warning");
+      this.log(`讲师离开房间`, "warning");
     },
     /**
      * 当远程用户屏幕分享的状态发生变化
      **/
     onUserSubStreamAvailable(uid, available) {
-      //todo
       if (available) {
         this.showRemoteScreenSharing(uid);
       } else {
@@ -255,7 +280,6 @@ export default {
      * 显示远程用户的屏幕分享
      */
     showRemoteScreenSharing(uid) {
-      //todo
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeSub}`;
       let W = this.subStreamWidth;
       let H = this.subStreamHeight;
@@ -298,11 +322,15 @@ export default {
      */
     exitRooms() {
       ipcRenderer.send("exitRoom");
+      this.trtcCloud.stopLocalAudio();
       this.trtcCloud.exitRoom();
       setTimeout(() => {
         this.$router.push("/");
       }, 0);
     },
+    /**
+     * 触发消息通知条的方法
+     */
     log(text, type) {
       this.$refs.log.logInfo = {
         logText: text,

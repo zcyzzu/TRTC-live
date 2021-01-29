@@ -1,7 +1,12 @@
 <template>
   <div>
-    <v-dialog v-model="settingDailog" max-width="700">
+    <v-dialog v-model="settingDailog" max-width="700" persistent>
       <v-card width="700" height="600">
+        <div class="text-right">
+          <v-btn icon @click="settingDailog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
         <setting @changeTab="changeTab"></setting>
         <component
           id="rightContent"
