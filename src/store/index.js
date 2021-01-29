@@ -1,8 +1,8 @@
+import { ipcRenderer } from "electron";
+import TRTCCloud from "trtc-electron-sdk";
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router";
-import { ipcRenderer } from "electron";
-import TRTCCloud from "trtc-electron-sdk";
 
 Vue.use(Vuex);
 

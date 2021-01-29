@@ -1,7 +1,7 @@
 <template>
   <div>
     <titleBar></titleBar>
-    <div id="power" class="d-flex  justify-space-around align-center">
+    <div id="power" class="d-flex justify-space-around align-center">
       <div>
         上行网络质量：
         <v-btn :color="localNetworkQuality.color" small elevation="0">{{
@@ -48,6 +48,7 @@ import {
   TRTCRoleType,
   TRTCParams,
   TRTCAudioQuality,
+  TRTCRenderParams,
 } from "trtc-electron-sdk/liteav/trtc_define";
 import { mapState } from "vuex";
 import log from "@/components/log";
@@ -61,6 +62,8 @@ export default {
   },
   data() {
     return {
+      videoFillMode: TRTCVideoFillMode.TRTCVideoFillMode_Fit,
+      streamType: TRTCVideoStreamType.TRTCVideoStreamTypeSub,
       micStatus: false,
       speakerStatus: false,
       videoContainer: null,
@@ -84,48 +87,24 @@ export default {
     this.speakerStatus = this.trtcCloud.getCurrentSpeakerDeviceMute();
   },
   mounted() {
-    this.$nextTick(() => {
-      /**
-       * @description 获取承载直播画面的容器
-       */
-      this.videoContainer = document.querySelector("#video-container");
-      this.trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
-      this.trtcCloud.on(
-        "onRemoteUserEnterRoom",
-        this.onRemoteUserEnterRoom.bind(this)
-      );
-      this.trtcCloud.on(
-        "onRemoteUserLeaveRoom",
-        this.onRemoteUserLeaveRoom.bind(this)
-      );
-      this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
-      this.trtcCloud.on(
-        "onUserSubStreamAvailable",
-        this.onUserSubStreamAvailable.bind(this)
-      );
-      this.trtcCloud.on(
-        "onSendFirstLocalAudioFrame",
-        this.onSendFirstLocalAudioFrame.bind(this)
-      );
-      let param = new TRTCParams();
-      param.sdkAppId = parseInt(this.sdkappid);
-      param.userSig = String(this.usersig);
-      param.roomId = parseInt(this.roomid);
-      param.userId = String(this.userid);
-      param.privateMapKey = ""; // 房间签名（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
-      param.businessInfo = ""; // 业务数据（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
-      param.role = TRTCRoleType.TRTCRoleAudience; // 直播场景下的角色，仅适用于直播场景（TRTCAppSceneLIVE 和 TRTCAppSceneVoiceChatRoom），视频通话场景下指定无效。默认值：主播（TRTCRoleAnchor）
-      this.trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
-      this.trtcCloud.startLocalAudio();
-      // this.trtcCloud.muteLocalAudio(true);
-      // let exdom = document.createElement("div");
-      // this.trtcCloud.startLocalPreview(exdom);
-    });
+    this.videoContainer = document.querySelector("#video-container");
+    this.trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
+    this.trtcCloud.on(
+      "onRemoteUserEnterRoom",
+      this.onRemoteUserEnterRoom.bind(this)
+    );
+    this.trtcCloud.on(
+      "onUserSubStreamAvailable",
+      this.onUserSubStreamAvailable.bind(this)
+    );
+    this.trtcCloud.on(
+      "onRemoteUserLeaveRoom",
+      this.onRemoteUserLeaveRoom.bind(this)
+    );
+    this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
+    this.enterRoom();
   },
   methods: {
-    onSendFirstLocalAudioFrame() {
-      console.log("首帧本地音频数据已经被送出");
-    },
     /**
      * @description 切换底部麦克风状态（打开/关闭）
      */
@@ -152,17 +131,6 @@ export default {
       }
     },
     /**
-     * @description 上下行网络质量监控回调（每2秒触发一次）
-     * @param {any} localQuality 上行网络质量
-     * @param {any} remoteQuality 下行网络质量
-     */
-    onNetworkQuality(localQuality, remoteQuality) {
-      this.localNetworkQuality = networkQualityEnumMapper(localQuality.quality);
-      this.remoteNetworkQuality = networkQualityEnumMapper(
-        remoteQuality[0].quality
-      );
-    },
-    /**
      * 当进入房间时触发的回调
      * @param {number} result - 进房结果， 大于 0 时，为进房间消耗的时间，这表示进进房成功。如果为 -1 ，则表示进房失败。
      **/
@@ -172,78 +140,6 @@ export default {
       } else {
         this.log(`进房失败 ${result}`, "error");
       }
-    },
-    /**
-     * 当主播进房时，把主播ID push 到列表里，并返回列表的长度
-     */
-    anchorIn(uid) {
-      if (!this.anchorIdList.includes(uid)) {
-        this.anchorIdList.push(uid);
-      }
-      return this.anchorIdList.length;
-    },
-    /**
-     * 视频元素自动换行排版
-     */
-    videoTypeSettingAutoWrap() {
-      let maxPerline = 2; // 每行最多放三个
-      let remoteVideos = this.remoteVideos;
-      let winWidth = 100; // 窗口宽度，百分比值
-      let winHeight = 100; // 窗口高度，百分比值
-      let len = Object.keys(remoteVideos).length;
-      let nw = 1;
-      let nh = 1;
-      for (let id in remoteVideos) {
-        nw = len <= maxPerline ? len : maxPerline;
-        nh = Math.ceil(len / maxPerline);
-        remoteVideos[id].className = `user-video-container-auto-wrap`;
-        remoteVideos[id].style.width = `${winWidth / nw}vw`;
-        remoteVideos[id].style.height = `${winHeight / nh}vh`;
-      }
-    },
-    /**
-     * 显示主播的视频，直播模式下，显示主播的画面
-     */
-    showAnchorVideo(uid) {
-      let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
-      let view = document.getElementById(id);
-      if (!view) {
-        view = document.createElement("div");
-        view.id = id;
-        this.videoContainer.appendChild(view);
-      }
-      if (view.className.indexOf("anchor-view") < 0) {
-        view.classList.add("anchor-view");
-      }
-      this.remoteVideos[id] = view;
-      this.trtcCloud.startRemoteView(uid, view);
-      this.trtcCloud.setRemoteViewFillMode(
-        uid,
-        TRTCVideoFillMode.TRTCVideoFillMode_Fill
-      );
-      this.videoTypeSettingAutoWrap();
-    },
-    /**
-     * 关闭主播的视频
-     * @param {number} uid
-     */
-    closeAnchorVideo(uid) {
-      let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
-      let view = document.getElementById(id);
-      if (view) {
-        this.videoContainer.removeChild(view);
-      }
-      delete this.remoteVideos[id];
-      this.remoteVideoIndex--;
-      this.videoTypeSettingAutoWrap();
-    },
-    /**
-     * 当主播退房时，把主播ID 从列表中去除，并返回列表的长度
-     */
-    anchorOut(uid) {
-      let idx = this.anchorIdList.indexOf(uid);
-      this.anchorIdList.splice(idx, 1);
-      return this.anchorIdList.length;
     },
     /**
      * 当主播进入本房间
@@ -267,41 +163,65 @@ export default {
       this.log(`讲师离开房间`, "warning");
     },
     /**
-     * 当远程用户屏幕分享的状态发生变化
-     **/
+     * 关闭主播的视频
+     * @param {number} uid
+     */
+    closeAnchorVideo(uid) {
+      let id = `${uid}-${this.roomId}-${this.streamType}`;
+      let view = document.getElementById(id);
+      if (view) {
+        this.videoContainer.removeChild(view);
+      }
+      delete this.remoteVideos[id];
+      this.remoteVideoIndex--;
+    },
+    /**
+     * @description 上下行网络质量监控回调（每2秒触发一次）
+     * @param {any} localQuality 上行网络质量
+     * @param {any} remoteQuality 下行网络质量
+     */
+    onNetworkQuality(localQuality, remoteQuality) {
+      this.localNetworkQuality = networkQualityEnumMapper(localQuality.quality);
+      this.remoteNetworkQuality = networkQualityEnumMapper(
+        remoteQuality[0].quality
+      );
+    },
     onUserSubStreamAvailable(uid, available) {
       if (available) {
-        this.showRemoteScreenSharing(uid);
+        let view = this.findVideoView(uid, this.streamType);
+        this.trtcCloud.startRemoteSubStreamView(uid, view, this.streamType);
+        let params = new TRTCRenderParams();
+        params.fillMode = this.videoFillMode;
+        this.trtcCloud.setRemoteRenderParams(uid, this.streamType, params);
       } else {
+        this.trtcCloud.stopRemoteView(uid, destroyVideoView);
         this.closeRemoteScreenSharing(uid);
       }
     },
-    /**
-     * 显示远程用户的屏幕分享
-     */
-    showRemoteScreenSharing(uid) {
-      let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeSub}`;
-      let W = this.subStreamWidth;
-      let H = this.subStreamHeight;
+    enterRoom() {
+      let param = new TRTCParams();
+      param.sdkAppId = parseInt(this.sdkappid);
+      param.roomId = parseInt(this.roomid);
+      param.userId = this.userid;
+      param.userSig = this.usersig;
+      param.privateMapKey = "";
+      param.businessInfo = "";
+      this.trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
+      this.trtcCloud.startLocalAudio();
+      this.trtcCloud.muteLocalAudio(false);
+    },
+    findVideoView(uid, streamtype) {
+      let id = `${uid}-${this.roomId}-${this.streamType}`;
       let view = document.getElementById(id);
       if (!view) {
         view = document.createElement("div");
         view.id = id;
-        view.style.width = `${W}px`;
-        view.style.height = `${H}px`;
+        // view.style.width = `100vw`;
+        // view.style.height = `100vh`;
         this.videoContainer.appendChild(view);
       }
       this.remoteVideos[id] = view;
-      this.trtcCloud.startRemoteView(
-        uid,
-        view,
-        TRTCVideoStreamType.TRTCVideoStreamTypeSub
-      );
-      this.trtcCloud.setRemoteSubStreamViewFillMode(
-        uid,
-        TRTCVideoFillMode.TRTCVideoFillMode_Fit
-      );
-      this.videoTypeSettingAutoWrap();
+      return view;
     },
     /**
      * 关闭远程用户的屏幕分享
@@ -310,13 +230,21 @@ export default {
      */
     closeRemoteScreenSharing(uid) {
       //todo
-      let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeSub}`;
+      let id = `${uid}-${this.roomId}-${this.streamType}`;
       let view = document.getElementById(id);
       if (view) {
         this.videoContainer.removeChild(view);
       }
       delete this.remoteVideos[id];
     },
+    // // 在视频用户退出视频时，将些 Dom 结点移除掉
+    // destroyVideoView(uid, streamtype) {
+    //   let key = uid + "_" + streamtype;
+    //   var userVideoEl = document.getElementById(key);
+    //   if (userVideoEl) {
+    //     document.querySelector("#video_wrap").removeChild(userVideoEl);
+    //   }
+    // },
     /**
      * 离开房间
      */
@@ -341,6 +269,13 @@ export default {
   },
   computed: {
     ...mapState(["userid", "roomid", "sdkappid", "usersig", "trtcCloud"]),
+    subStreamWidth() {
+      return Math.floor(this.videoContainer.clientWidth);
+    },
+
+    subStreamHeight() {
+      return Math.floor(this.videoContainer.clientHeight);
+    },
   },
 };
 </script>
