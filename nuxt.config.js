@@ -1,20 +1,20 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from "vuetify/es5/util/colors";
 
 export default {
     /*
      ** Nuxt rendering mode
      ** See https://nuxtjs.org/api/configuration-mode
      */
-    mode: 'universal',
-    server: {
-        port: process.env.SERVER_PORT || 8008, // default: 3000
-        host: '0.0.0.0' // default: localhost,
-    },
+    mode: "universal",
+    // server: {
+    //     port: process.env.SERVER_PORT || 8008, // default: 3000
+    //     host: "0.0.0.0" // default: localhost,
+    // },
     /*
      ** Nuxt target
      ** See https://nuxtjs.org/api/configuration-target
      */
-    target: 'static',
+    target: "static",
     /*
      ** Headers of the page
      ** See https://nuxtjs.org/api/configuration-head
@@ -22,40 +22,45 @@ export default {
     head: {
         title: "直播啦",
         meta: [
-            { charset: 'utf-8' },
-            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+            { charset: "utf-8" },
+            { name: "viewport", content: "width=device-width, initial-scale=1" },
+            {
+                hid: "description",
+                name: "description",
+                content: process.env.npm_package_description || ""
+            }
         ],
         link: [{
-            rel: 'icon',
-            type: 'image/x-icon',
-            href: '/favicon.ico'
-        },
-        // {
-        //     rel: 'stylesheet',
-        //     href: 'https://fonts.loli.net/icon?family=Material+Icons'
-        // },
-        {
-            rel: 'stylesheet',
-            href: 'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css'
-        }
+                rel: "icon",
+                type: "image/x-icon",
+                href: "/favicon.ico"
+            },
+            // {
+            //     rel: 'stylesheet',
+            //     href: 'https://fonts.loli.net/icon?family=Material+Icons'
+            // },
+            {
+                rel: "stylesheet",
+                href: "https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css"
+            }
         ]
     },
     /*
      ** Global CSS
      */
-    css: [
-        "~/assets/main.css"
-    ],
+    css: ["~/assets/main.css"],
     router: {
         // middleware: ['index'],
-        fallback: true,
+        fallback: true
     },
     /*
      ** Plugins to load before mounting the App
      ** https://nuxtjs.org/guide/plugins
      */
-    plugins: [],
+    // plugins: [{
+    //     src: "~/plugins/trtc-js-sdk.js",
+    //     ssr: false
+    // }],
     /*
      ** Auto import components
      ** See https://nuxtjs.org/api/configuration-components
@@ -64,15 +69,13 @@ export default {
     /*
      ** Nuxt.js dev-modules
      */
-    buildModules: [
-        '@nuxtjs/vuetify',
-    ],
+    buildModules: ["@nuxtjs/vuetify"],
     /*
      ** Nuxt.js modules
      */
     modules: [
         // Doc: https://axios.nuxtjs.org/usage
-        '@nuxtjs/axios',
+        "@nuxtjs/axios"
     ],
     /*
      ** Axios module configuration
@@ -84,7 +87,7 @@ export default {
      ** https://github.com/nuxt-community/vuetify-module
      */
     vuetify: {
-        customVariables: ['~/assets/variables.scss'],
+        customVariables: ["~/assets/variables.scss"],
         defaultAssets: {
             font: false,
             icons: false
@@ -102,7 +105,7 @@ export default {
                     success: colors.green.accent3
                 }
             }
-        },
+        }
     },
     /*
      ** Build configuration
@@ -110,17 +113,15 @@ export default {
      */
     build: {
         babel: {
-            sourceType: "unambiguous",
+            sourceType: "unambiguous"
         },
-        transpile: [
-            "vuetify",
-        ],
+        transpile: ["vuetify"],
         // transpile: [
         //     /(.+)(nuxt-vuex-localstorage\/)(.+)(\.js)$/
         // ],
         /*
          ** You can extend webpack config here
          */
-        extend(config, ctx) { },
-    },
-}
+        extend(config, ctx) {}
+    }
+};
