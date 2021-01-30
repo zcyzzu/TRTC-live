@@ -17,7 +17,7 @@ async function createWindow() {
         width: 1200,
         height: 800,
         frame: false,
-        backgroundColor: "#eee",
+        // backgroundColor: "#000",
         resizable: false, //禁止自定义窗口尺寸
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,

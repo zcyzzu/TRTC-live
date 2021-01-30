@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      roomJwt: "9QY8Pcp4wWhrKQTWeeiCE",
+      roomJwt: "",
     };
   },
   created() {
@@ -88,12 +88,12 @@ export default {
      * @description 进入房间失败后的回调，调用log组件进行提示
      */
     ipcRenderer.on("login_back_error", (event, arg) => {
-      this.$store.commit("cancelOverlay");
       this.$refs.log.logInfo = {
         logText: "口令错误,请检查是否输入正确",
         logStatus: true,
         logType: "error",
       };
+      this.$store.commit("cancelOverlay");
     });
   },
   methods: {

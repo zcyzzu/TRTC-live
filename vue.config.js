@@ -2,7 +2,6 @@ const StringReplaceWebpackPlugin = require("string-replace-webpack-plugin");
 const WebpackObfuscator = require("webpack-obfuscator");
 const CompressionPlugin = require("compression-webpack-plugin");
 const os = require("os");
-console.log("process.argv:", process.argv);
 
 function getArgvToObject() {
     let cmdArgvs = process.argv;
@@ -51,20 +50,20 @@ module.exports = {
                 },
             }, ],
         },
-        // plugins: [
-        //     new WebpackObfuscator({
-        //         rotateStringArray: true,
-        //         compact: true, // 紧凑 从输出混淆代码中删除换行符。
-        //         controlFlowFlattening: false, // 此选项极大地影响了运行速度降低1.5倍的性能。 启用代码控制流展平。控制流扁平化是源代码的结构转换，阻碍了程序理解。
-        //     }),
-        //     new CompressionPlugin({
-        //         algorithm: "gzip",
-        //         test: /\.js$|\.html$|\.css/, // + $|\.svg$|\.png$|\.jpg
-        //         threshold: 10240, //对超过10k的数据压缩
-        //         deleteOriginalAssets: false, //不删除原文件
-        //     }),
-        //     new StringReplaceWebpackPlugin(),
-        // ],
+        plugins: [
+            new WebpackObfuscator({
+                rotateStringArray: true,
+                compact: true, // 紧凑 从输出混淆代码中删除换行符。
+                controlFlowFlattening: false, // 此选项极大地影响了运行速度降低1.5倍的性能。 启用代码控制流展平。控制流扁平化是源代码的结构转换，阻碍了程序理解。
+            }),
+            new CompressionPlugin({
+                algorithm: "gzip",
+                test: /\.js$|\.html$|\.css/, // + $|\.svg$|\.png$|\.jpg
+                threshold: 10240, //对超过10k的数据压缩
+                deleteOriginalAssets: false, //不删除原文件
+            }),
+            new StringReplaceWebpackPlugin(),
+        ],
     },
     pluginOptions: {
         electronBuilder: {
@@ -72,9 +71,9 @@ module.exports = {
             nodeModulesPath: ["./node_modules"],
             builderOptions: {
                 productName: "直播啦", //项目名，也是生成的安装文件名
-                electronVersion: "9.0.0",
+                electronVersion: "11.2.0",
                 appId: "zhibola-appid",
-                copyright: "Copyright © 2020", //版权信息
+                copyright: "Copyright © 2021", //版权信息
                 directories: {
                     output: "./dist", //输出文件路径
                 },
@@ -90,8 +89,7 @@ module.exports = {
                     }, ],
                     extraFiles: {
                         from: "node_modules/trtc-electron-sdk/build/Release/",
-                        to: "./resources",
-                        filter: ["**/*"]
+                        to: ".",
                     },
                 },
                 extraResources: {

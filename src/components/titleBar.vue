@@ -7,7 +7,7 @@
         max-height="15"
         max-width="15"
       ></v-img>
-      <div class="d-flex align-center text-subtitle-2">
+      <div class="d-flex align-center text-subtitle-2 white--text">
         <span>直播啦</span>
       </div>
       <div
@@ -15,14 +15,14 @@
         @click="miniIndex"
         class="d-flex align-center pa-2 mr-8"
       >
-        <v-icon small>mdi-window-minimize</v-icon>
+        <v-icon color="white" small>mdi-window-minimize</v-icon>
       </div>
       <div
         id="windowOperate_close"
         @click="closeIndex"
         class="d-flex align-center pa-2"
       >
-        <v-icon small>mdi-close</v-icon>
+        <v-icon color="white" small>mdi-close</v-icon>
       </div>
     </v-row>
   </div>
@@ -51,7 +51,7 @@ export default {
   -webkit-app-region: drag;
   -webkit-user-select: none;
   position: relative;
-  background: #e1f5fe;
+  background: #000;
 }
 #windowOperate_mini,
 #windowOperate_close {

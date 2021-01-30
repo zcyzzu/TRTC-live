@@ -36,6 +36,15 @@
         </v-btn>
       </div>
     </div>
+    <div
+      v-if="haveAnchor"
+      class="d-flex justify-center align-center"
+      style="height:95vh;width:100vw"
+    >
+      <span class="text-h3">
+        当前房间没有讲师/讲师已离开
+      </span>
+    </div>
     <div id="video-container"></div>
     <log ref="log"></log>
   </div>
@@ -45,9 +54,7 @@ import {
   TRTCAppScene,
   TRTCVideoStreamType,
   TRTCVideoFillMode,
-  TRTCRoleType,
   TRTCParams,
-  TRTCAudioQuality,
   TRTCRenderParams,
 } from "trtc-electron-sdk/liteav/trtc_define";
 import { mapState } from "vuex";
@@ -64,11 +71,13 @@ export default {
     return {
       videoFillMode: TRTCVideoFillMode.TRTCVideoFillMode_Fit,
       streamType: TRTCVideoStreamType.TRTCVideoStreamTypeSub,
+      haveAnchor: false,
       micStatus: false,
       speakerStatus: false,
       videoContainer: null,
       anchorIdList: [], // 主播ID列表
       remoteVideos: {}, // 存放远程用户视频列表
+      noAnchorCountDown: 3, // 空房间倒计时检测的最大时长，如果达到了这个时间，仍没有触发 onUserVideoAvailable ，就会提示用户是否要退出此直播间。
       localNetworkQuality: {
         text: "很好",
         color: "green",
@@ -101,7 +110,7 @@ export default {
       "onRemoteUserLeaveRoom",
       this.onRemoteUserLeaveRoom.bind(this)
     );
-    this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
+    // this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
     this.enterRoom();
   },
   methods: {
@@ -131,12 +140,27 @@ export default {
       }
     },
     /**
+     * 启动一个计时器，当进入了空的房间 n 秒后给出提示
+     */
+    startNoAnchorCountDown() {
+      this.noAnchorTimoutID = setTimeout(() => {
+        if (this.anchorIdList.length === 0) {
+          this.haveAnchor = true;
+          this.log(
+            "当前房间没有讲师，请退出检查房间口令是否输入正确！",
+            "error"
+          );
+        }
+      }, this.noAnchorCountDown * 1000);
+    },
+    /**
      * 当进入房间时触发的回调
      * @param {number} result - 进房结果， 大于 0 时，为进房间消耗的时间，这表示进进房成功。如果为 -1 ，则表示进房失败。
      **/
     onEnterRoom(result) {
       if (result > 0) {
         this.log(`进房成功，使用了 ${result} 毫秒`, "success");
+        this.startNoAnchorCountDown();
       } else {
         this.log(`进房失败 ${result}`, "error");
       }
@@ -148,8 +172,6 @@ export default {
       if (!this.anchorIdList.includes(uid)) {
         this.anchorIdList.push(uid);
         this.log(`讲师已进入房间。`, "success");
-        this.trtcCloud.setCurrentMicDeviceMute(this.micStatus);
-        this.trtcCloud.setCurrentSpeakerDeviceMute(this.speakerStatus);
       }
     },
     /**
@@ -158,9 +180,18 @@ export default {
     onRemoteUserLeaveRoom(uid) {
       this.closeAnchorVideo(uid);
       if (this.anchorOut(uid) === 0) {
+        this.haveAnchor = true;
         this.log(`讲师离开房间`, "warning");
       }
       this.log(`讲师离开房间`, "warning");
+    },
+    /**
+     * 当主播退房时，把主播ID 从列表中 去除，并返回列表的长度
+     */
+    anchorOut(uid) {
+      let idx = this.anchorIdList.indexOf(uid);
+      this.anchorIdList = this.anchorIdList.slice(idx, 0);
+      return this.anchorIdList.length;
     },
     /**
      * 关闭主播的视频
@@ -181,10 +212,14 @@ export default {
      * @param {any} remoteQuality 下行网络质量
      */
     onNetworkQuality(localQuality, remoteQuality) {
-      this.localNetworkQuality = networkQualityEnumMapper(localQuality.quality);
-      this.remoteNetworkQuality = networkQualityEnumMapper(
-        remoteQuality[0].quality
-      );
+      if (this.anchorIdList.length > 0) {
+        this.localNetworkQuality = networkQualityEnumMapper(
+          localQuality.quality
+        );
+        this.remoteNetworkQuality = networkQualityEnumMapper(
+          remoteQuality[0].quality
+        );
+      }
     },
     onUserSubStreamAvailable(uid, available) {
       if (available) {
@@ -194,10 +229,13 @@ export default {
         params.fillMode = this.videoFillMode;
         this.trtcCloud.setRemoteRenderParams(uid, this.streamType, params);
       } else {
-        this.trtcCloud.stopRemoteView(uid, destroyVideoView);
+        this.trtcCloud.stopRemoteView(uid, this.streamType);
         this.closeRemoteScreenSharing(uid);
       }
     },
+    /**
+     * @description 进房参数设置与进房
+     */
     enterRoom() {
       let param = new TRTCParams();
       param.sdkAppId = parseInt(this.sdkappid);
@@ -210,14 +248,17 @@ export default {
       this.trtcCloud.startLocalAudio();
       this.trtcCloud.muteLocalAudio(false);
     },
+    /**
+     * @description 创建一个视频承载dom
+     */
     findVideoView(uid, streamtype) {
       let id = `${uid}-${this.roomId}-${this.streamType}`;
       let view = document.getElementById(id);
       if (!view) {
         view = document.createElement("div");
         view.id = id;
-        // view.style.width = `100vw`;
-        // view.style.height = `100vh`;
+        view.style.width = `100vw`;
+        view.style.height = `100vh`;
         this.videoContainer.appendChild(view);
       }
       this.remoteVideos[id] = view;
@@ -237,14 +278,14 @@ export default {
       }
       delete this.remoteVideos[id];
     },
-    // // 在视频用户退出视频时，将些 Dom 结点移除掉
-    // destroyVideoView(uid, streamtype) {
-    //   let key = uid + "_" + streamtype;
-    //   var userVideoEl = document.getElementById(key);
-    //   if (userVideoEl) {
-    //     document.querySelector("#video_wrap").removeChild(userVideoEl);
-    //   }
-    // },
+    // 在视频用户退出视频时，将些 Dom 结点移除掉
+    destroyVideoView(uid, streamtype) {
+      let key = uid + "_" + streamtype;
+      var userVideoEl = document.getElementById(key);
+      if (userVideoEl) {
+        document.querySelector("#video_wrap").removeChild(userVideoEl);
+      }
+    },
     /**
      * 离开房间
      */
@@ -269,13 +310,6 @@ export default {
   },
   computed: {
     ...mapState(["userid", "roomid", "sdkappid", "usersig", "trtcCloud"]),
-    subStreamWidth() {
-      return Math.floor(this.videoContainer.clientWidth);
-    },
-
-    subStreamHeight() {
-      return Math.floor(this.videoContainer.clientHeight);
-    },
   },
 };
 </script>
