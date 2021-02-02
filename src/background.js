@@ -3,7 +3,7 @@ const electron = require("electron");
 import { app, protocol, BrowserWindow, ipcMain, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-const Axios = require("axios");
+import axios from "axios"
 const isDevelopment = process.env.NODE_ENV !== "production";
 protocol.registerSchemesAsPrivileged([
     { scheme: "app", privileges: { secure: true, standard: true } },
@@ -35,7 +35,7 @@ async function createWindow() {
         win.loadURL("app://./index.html");
     }
 }
-app.on("ready", async() => {
+app.on("ready", async () => {
     if (isDevelopment && !process.env.IS_TEST) {
         try {
             await installExtension(VUEJS_DEVTOOLS);
@@ -44,29 +44,33 @@ app.on("ready", async() => {
         }
     }
     createWindow();
-    ipcMain.on("createRoom", async function(event, arg) {
+    ipcMain.on("createRoom", async function (event, arg) {
         win.setFullScreen(true);
     });
-    ipcMain.on("exitRoom", async function(event, arg) {
+    ipcMain.on("exitRoom", async function (event, arg) {
         win.setFullScreen(false);
     });
-    ipcMain.on("miniIndex", async function(event, arg) {
+    ipcMain.on("miniIndex", async function (event, arg) {
         win.minimize();
     });
-    ipcMain.on("closeIndex", function(event, arg) {
+    ipcMain.on("closeIndex", function (event, arg) {
         win.destroy();
     });
-    ipcMain.on("login", function(event, arg) {
-        Axios.get(arg)
+    ipcMain.on("login", function (event, arg) {
+        //TODO 如果开启代理，因为代理使用http协议，但是axios请求远程服务器地址为tls加密
+        //会导致axios报错
+        axios.get(arg)
             .then((val) => {
                 event.reply("login_back", val.data);
             })
             .catch((err) => {
+                //TODO post err log to server
+                console.log(err)
                 event.reply("login_back_error", err);
             });
     });
     let displays = electron.screen.getAllDisplays(); //获取所有显示器数组
-    ipcMain.on("sendXY", function(
+    ipcMain.on("sendXY", function (
         event,
         width_x,
         height_y,

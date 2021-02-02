@@ -148,7 +148,7 @@ export default {
      */
     enterRoom() {
       this.$store.commit("setOverlay");
-      let reg = /[0123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{27}/g;
+      let reg = /[0-9A-Za-z]{27}/g;
       if (reg.test(this.roomJwt)) {
         ipcRenderer.send(
           "login",
