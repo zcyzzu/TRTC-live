@@ -25,7 +25,7 @@
           large
           @click="enterRoom"
           color="blue dark-1"
-          class=" white--text mr-4"
+          class="white--text mr-4"
           >进入房间</v-btn
         >
       </v-row>
@@ -148,7 +148,7 @@ export default {
      */
     enterRoom() {
       this.$store.commit("setOverlay");
-      let reg = /[0123456789ABCDEFGHJKLMNOPQRSTUVWXYZ_abcdefghijkmnopqrstuvwxyz-]{21}/g;
+      let reg = /[0123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{27}/g;
       if (reg.test(this.roomJwt)) {
         ipcRenderer.send(
           "login",
