@@ -59,7 +59,7 @@ export default {
   },
   data() {
     return {
-      roomJwt: "1nxfmilBvnKeXxhKAXsEwJXTw4k",
+      roomJwt: "",
     };
   },
   created() {
