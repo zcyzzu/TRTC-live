@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import TRTCCloud from "trtc-electron-sdk";
 import Vue from "vue";
 import Vuex from "vuex";
@@ -30,7 +29,6 @@ export default new Vuex.Store({
             state.roomid = info.roomid;
             state.sdkappid = info.sdkappid;
             state.usersig = info.usersig;
-            ipcRenderer.send("createRoom", info);
             state.overlay = false;
             router.push({
                 path: "/room",

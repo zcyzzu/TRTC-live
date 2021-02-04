@@ -11,13 +11,10 @@ protocol.registerSchemesAsPrivileged([
 
 let win, qrcode;
 async function createWindow() {
-    // Create the browser window.
     win = new BrowserWindow({
         show: false,
         width: 1200,
         height: 800,
-        // backgroundColor: "#000",
-        // resizable: false, //禁止自定义窗口尺寸
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             webSecurity: false
@@ -55,21 +52,6 @@ app.on("ready", async() => {
             }
         })
     }
-    ipcMain.on("createRoom", async function(event, arg) {
-        // win.setFullScreen(true);
-    });
-    ipcMain.on("exitRoom", async function(event, arg) {
-        // win.setFullScreen(false);
-    });
-    ipcMain.on("miniIndex", async function(event, arg) {
-        win.minimize();
-    });
-    ipcMain.on("maxIndex", async function(event, arg) {
-        win.maximize();
-    });
-    ipcMain.on("closeIndex", function(event, arg) {
-        win.destroy();
-    });
     let displays = electron.screen.getAllDisplays(); //获取所有显示器数组
     ipcMain.on("sendXY", function(
         event,

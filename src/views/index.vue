@@ -1,6 +1,5 @@
 <template>
   <div class="index_box">
-    <!-- <titleBar></titleBar> -->
     <div id="login">
       <v-img
         height="50"
@@ -43,15 +42,13 @@
   </div>
 </template>
 <script>
-import titleBar from "@/components/titleBar";
-import overlay from "@/components/overlay";
+import Driver from "driver.js";
 import log from "@/components/log";
 import dialogs from "@/components/dialog";
+import overlay from "@/components/overlay";
 import settingQrcode from "@/components/settingQrcode.vue";
-import Driver from "driver.js";
 export default {
   components: {
-    titleBar,
     log,
     overlay,
     dialogs,

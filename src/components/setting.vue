@@ -6,7 +6,7 @@
           v-for="(ele, index) in settingList"
           :key="index"
           @click="settingItems(index)"
-          class="item d-flex  align-center px-4 py-2"
+          class="item d-flex align-center px-4 py-2"
         >
           <div id="step2" v-if="index === 1">
             <v-icon class="mr-4" small>{{ ele[0] }}</v-icon>
@@ -23,16 +23,11 @@
 </template>
 <script>
 import Driver from "driver.js";
-import titleBar from "@/components/titleBar";
 export default {
-  components: {
-    titleBar,
-  },
   data: () => ({
     settingList: [
       ["mdi-email", "常规设置", "general"],
       ["mdi-microphone", "声音设置", "sound"],
-      // ["mdi-code-braces", "其他设置", "others"],
     ],
     init_index: 0,
   }),
@@ -74,9 +69,6 @@ export default {
     }, 300);
   },
   methods: {
-    /**
-     * @description
-     */
     settingItems(index) {
       this.$emit("changeTab", this.settingList[index][2]);
       document

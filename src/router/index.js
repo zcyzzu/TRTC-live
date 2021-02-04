@@ -20,39 +20,6 @@ const routes = [{
         component: () =>
             import ("../views/room.vue"),
     },
-    // {
-    //     path: "/setting",
-    //     component: () =>
-    //         import ("../views/setting.vue"),
-    //     meta: {
-    //         active: "/setting",
-    //     },
-    //     children: [{
-    //             path: "",
-    //             component: () =>
-    //                 import ("../views/setting/general.vue"),
-    //             meta: {
-    //                 active: 0,
-    //             },
-    //         },
-    //         {
-    //             path: "sound",
-    //             component: () =>
-    //                 import ("../views/setting/sound.vue"),
-    //             meta: {
-    //                 active: 1,
-    //             },
-    //         },
-    //         {
-    //             path: "others",
-    //             component: () =>
-    //                 import ("../views/setting/others.vue"),
-    //             meta: {
-    //                 active: 2,
-    //             },
-    //         },
-    //     ],
-    // },
 ];
 
 const router = new VueRouter({

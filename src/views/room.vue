@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <titleBar></titleBar> -->
     <div id="power" class="d-flex justify-space-around align-center">
       <div>
         上行网络质量：
@@ -58,11 +57,9 @@ import {
 import { mapState } from "vuex";
 import log from "@/components/log";
 import { ipcRenderer } from "electron";
-import titleBar from "@/components/titleBar";
 import { networkQualityEnumMapper } from "../common/qualityColorMapper";
 export default {
   components: {
-    titleBar,
     log,
   },
   data() {
@@ -109,7 +106,6 @@ export default {
       "onRemoteUserLeaveRoom",
       this.onRemoteUserLeaveRoom.bind(this)
     );
-    // this.trtcCloud.on("onNetworkQuality", this.onNetworkQuality.bind(this));
     this.enterRoom();
   },
   methods: {
@@ -122,7 +118,6 @@ export default {
         this.micStatus = false;
       } else {
         this.trtcCloud.setCurrentMicDeviceMute(true);
-        // this.trtcCloud.muteLocalAudio(true);
         this.micStatus = true;
       }
     },
@@ -259,21 +254,6 @@ export default {
       }
     },
     /**
-     * @description 上下行网络质量监控回调（每2秒触发一次）
-     * @param {any} localQuality 上行网络质量
-     * @param {any} remoteQuality 下行网络质量
-     */
-    onNetworkQuality(localQuality, remoteQuality) {
-      if (this.anchorIdList.length > 0) {
-        this.localNetworkQuality = networkQualityEnumMapper(
-          localQuality.quality
-        );
-        this.remoteNetworkQuality = networkQualityEnumMapper(
-          remoteQuality[0].quality
-        );
-      }
-    },
-    /**
      * @description 用户是否开启了辅路画面
      * @param uid 用户标识  string
      * @param available 辅路画面是否开启 number
@@ -396,7 +376,6 @@ export default {
      */
     exitRooms() {
       try {
-        ipcRenderer.send("exitRoom");
         this.trtcCloud.stopLocalAudio();
         this.trtcCloud.exitRoom();
         setTimeout(() => {

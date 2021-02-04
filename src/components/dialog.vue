@@ -21,13 +21,11 @@
 import setting from "@/components/setting";
 import general from "@/components/setting/general";
 import sound from "@/components/setting/sound";
-import others from "@/components/setting/others";
 export default {
   components: {
     setting,
     general,
     sound,
-    others,
   },
   data() {
     return {
@@ -46,7 +44,7 @@ export default {
     },
   },
   watch: {
-    settingDailog: function(newVal, oldVal) {
+    settingDailog: function (newVal, oldVal) {
       if (newVal && this.componentId === "sound") {
         setTimeout(() => {
           this.$refs.sound.init();
