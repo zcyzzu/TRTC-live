@@ -1,6 +1,6 @@
 <template>
   <div class="index_box">
-    <titleBar></titleBar>
+    <!-- <titleBar></titleBar> -->
     <div id="login">
       <v-img
         height="50"
@@ -47,7 +47,6 @@ import titleBar from "@/components/titleBar";
 import overlay from "@/components/overlay";
 import log from "@/components/log";
 import dialogs from "@/components/dialog";
-import { ipcRenderer } from "electron";
 import settingQrcode from "@/components/settingQrcode.vue";
 import Driver from "driver.js";
 export default {
@@ -60,7 +59,7 @@ export default {
   },
   data() {
     return {
-      roomJwt: "",
+      roomJwt: "1nxfmilBvnKeXxhKAXsEwJXTw4k",
     };
   },
   created() {
@@ -78,23 +77,6 @@ export default {
         this.indexDriver();
       }
     }, 200);
-    /**
-     * @description 进入房间room成功后的回调，并将userid等参数传至vuex中保存
-     */
-    ipcRenderer.on("login_back", (event, arg) => {
-      this.$store.commit("setLoginInfo", arg);
-    });
-    /**
-     * @description 进入房间失败后的回调，调用log组件进行提示
-     */
-    ipcRenderer.on("login_back_error", (event, arg) => {
-      this.$refs.log.logInfo = {
-        logText: "口令错误,请检查是否输入正确",
-        logStatus: true,
-        logType: "error",
-      };
-      this.$store.commit("cancelOverlay");
-    });
   },
   methods: {
     /**
@@ -150,10 +132,23 @@ export default {
       this.$store.commit("setOverlay");
       let reg = /[0-9A-Za-z]{27}/g;
       if (reg.test(this.roomJwt)) {
-        ipcRenderer.send(
-          "login",
-          `https://live.daoshi.cloud/api/v2/roominfo/${this.roomJwt}`
-        );
+        this.$api
+          .enterRoom(this.roomJwt)
+          .then((val) => {
+            this.$store.commit("setLoginInfo", val.data);
+          })
+          .catch((err) => {
+            this.$api.uploadLog({
+              log: `enterRoom ${JSON.stringify(err)}`,
+              platform: "electron",
+            });
+            this.$refs.log.logInfo = {
+              logText: "口令错误,请检查是否输入正确",
+              logStatus: true,
+              logType: "error",
+            };
+            this.$store.commit("cancelOverlay");
+          });
       } else {
         this.$store.commit("cancelOverlay");
         this.$refs.log.logInfo = {

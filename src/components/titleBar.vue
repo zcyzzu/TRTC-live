@@ -13,9 +13,16 @@
       <div
         id="windowOperate_mini"
         @click="miniIndex"
-        class="d-flex align-center pa-2 mr-8"
+        class="d-flex align-center pa-2 mr-16"
       >
         <v-icon color="white" small>mdi-window-minimize</v-icon>
+      </div>
+      <div
+        id="windowOperate_max"
+        @click="maxIndex"
+        class="d-flex align-center pa-2 mr-8"
+      >
+        <v-icon color="white" small>mdi-window-maximize</v-icon>
       </div>
       <div
         id="windowOperate_close"
@@ -43,6 +50,12 @@ export default {
     miniIndex() {
       ipcRenderer.send("miniIndex");
     },
+    /**
+     * @description 模拟最大化按钮功能
+     */
+    maxIndex() {
+      ipcRenderer.send("maxIndex");
+    },
   },
 };
 </script>
@@ -54,7 +67,8 @@ export default {
   background: #000;
 }
 #windowOperate_mini,
-#windowOperate_close {
+#windowOperate_close,
+#windowOperate_max {
   -webkit-app-region: no-drag;
   position: absolute;
   right: 0px;
@@ -69,6 +83,12 @@ export default {
 }
 #windowOperate_mini:hover {
   background: gray;
+  .theme--light.v-icon {
+    color: white;
+  }
+}
+#windowOperate_max:hover {
+  background: orange;
   .theme--light.v-icon {
     color: white;
   }

@@ -16,11 +16,11 @@ async function createWindow() {
         show: false,
         width: 1200,
         height: 800,
-        frame: false,
         // backgroundColor: "#000",
-        resizable: false, //禁止自定义窗口尺寸
+        // resizable: false, //禁止自定义窗口尺寸
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+            webSecurity: false
         },
     });
     win.once("ready-to-show", () => {
@@ -35,7 +35,7 @@ async function createWindow() {
         win.loadURL("app://./index.html");
     }
 }
-app.on("ready", async () => {
+app.on("ready", async() => {
     if (isDevelopment && !process.env.IS_TEST) {
         try {
             await installExtension(VUEJS_DEVTOOLS);
@@ -43,34 +43,35 @@ app.on("ready", async () => {
             console.error("Vue Devtools failed to install:", e.toString());
         }
     }
-    createWindow();
-    ipcMain.on("createRoom", async function (event, arg) {
-        win.setFullScreen(true);
+    try {
+        createWindow();
+    } catch (error) {
+        axios({
+            method: 'post',
+            url: `https://live.daoshi.cloud/api/v2/logAppErr`,
+            data: {
+                log: `main-createdWindow ${JSON.stringify(error)}`,
+                platform: "electron",
+            }
+        })
+    }
+    ipcMain.on("createRoom", async function(event, arg) {
+        // win.setFullScreen(true);
     });
-    ipcMain.on("exitRoom", async function (event, arg) {
-        win.setFullScreen(false);
+    ipcMain.on("exitRoom", async function(event, arg) {
+        // win.setFullScreen(false);
     });
-    ipcMain.on("miniIndex", async function (event, arg) {
+    ipcMain.on("miniIndex", async function(event, arg) {
         win.minimize();
     });
-    ipcMain.on("closeIndex", function (event, arg) {
+    ipcMain.on("maxIndex", async function(event, arg) {
+        win.maximize();
+    });
+    ipcMain.on("closeIndex", function(event, arg) {
         win.destroy();
     });
-    ipcMain.on("login", function (event, arg) {
-        //TODO 如果开启代理，因为代理使用http协议，但是axios请求远程服务器地址为tls加密
-        //会导致axios报错
-        axios.get(arg)
-            .then((val) => {
-                event.reply("login_back", val.data);
-            })
-            .catch((err) => {
-                //TODO post err log to server
-                console.log(err)
-                event.reply("login_back_error", err);
-            });
-    });
     let displays = electron.screen.getAllDisplays(); //获取所有显示器数组
-    ipcMain.on("sendXY", function (
+    ipcMain.on("sendXY", function(
         event,
         width_x,
         height_y,
