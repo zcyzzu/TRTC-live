@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center" id="step3">
+      <v-col class="px-6 d-flex align-center" id="step3">
         <span class="spanName">麦克风：</span>
         <v-select
           outlined
@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center" id="step4">
+      <v-col class="px-6 d-flex align-center" id="step4">
         <span class="spanName">扬声器：</span>
         <v-select
           outlined
@@ -27,7 +27,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center" id="step5">
+      <v-col class="px-6 d-flex align-center" id="step5">
         <span class="spanName_long">麦克风音量：</span>
         <v-progress-linear
           v-model="micVol"
@@ -40,7 +40,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="mb-8">
-      <v-col class="px-6 d-flex  align-center" id="step6">
+      <v-col class="px-6 d-flex align-center" id="step6">
         <span class="spanName_long">扬声器音量：</span>
         <v-progress-linear
           v-model="speakerVol"
@@ -150,71 +150,112 @@ export default {
     init() {
       this.micList = [[], []];
       this.speakerList = [[], []];
-      this.trtcCloud.getMicDevicesList().forEach((ele) => {
-        this.micList[0].push(ele.deviceName);
-        this.micList[1].push(ele.deviceId);
-      });
-      this.trtcCloud.getSpeakerDevicesList().forEach((ele) => {
-        this.speakerList[0].push(ele.deviceName);
-        this.speakerList[1].push(ele.deviceId);
-      });
-      this.mic = this.micList[0][0];
-      this.speaker = this.speakerList[0][0];
-      this.micVol = this.trtcCloud.getCurrentMicDeviceVolume();
-      this.speakerVol = this.trtcCloud.getCurrentSpeakerVolume();
+      if (this.trtcCloud.getMicDevicesList().length > 0) {
+        this.trtcCloud.getMicDevicesList().forEach((ele) => {
+          this.micList[0].push(ele.deviceName);
+          this.micList[1].push(ele.deviceId);
+        });
+        this.mic = this.micList[0][0];
+        this.micVol = this.trtcCloud.getCurrentMicDeviceVolume();
+      } else {
+        this.micList[0].push("未找到可用的麦克风");
+        this.micList[1].push("未找到可用的麦克风");
+      }
+      if (this.trtcCloud.getSpeakerDevicesList().length > 0) {
+        this.trtcCloud.getSpeakerDevicesList().forEach((ele) => {
+          this.speakerList[0].push(ele.deviceName);
+          this.speakerList[1].push(ele.deviceId);
+        });
+        this.speaker = this.speakerList[0][0];
+        this.speakerVol = this.trtcCloud.getCurrentSpeakerVolume();
+      } else {
+        this.speakerList[0].push("未找到可用的扬声器");
+        this.speakerList[1].push("未找到可用的扬声器");
+      }
     },
     startTestSpeaker() {
-      const params = new AudioMusicParam();
-      params.id = 1;
-      params.path = this.testPath;
-      params.publish = true;
-      this.trtcCloud.startPlayMusic(params, {
-        onStart: (id, errCode) => {
-          this.$refs.log.logInfo = {
-            logText: "开始扬声器测试",
-            logStatus: true,
-            logType: "success",
-          };
-        },
-        onPlayProgress: (id, curPtsMS, durationMS) => {
-          this.speakerProgress = Math.ceil((curPtsMS / durationMS) * 100);
-        },
-        onComplete: (id, errCode) => {
-          this.speakerProgress = 0;
-          this.$refs.log.logInfo = {
-            logText: "扬声器测试结束",
-            logStatus: true,
-            logType: "success",
-          };
-        },
-      });
+      if (this.speakerList[0] === "未找到可用的扬声器") {
+        this.$refs.log.logInfo = {
+          logText: "未找到可用的扬声器",
+          logStatus: true,
+          logType: "error",
+        };
+      } else {
+        const params = new AudioMusicParam();
+        params.id = 1;
+        params.path = this.testPath;
+        params.publish = true;
+        this.trtcCloud.startPlayMusic(params, {
+          onStart: (id, errCode) => {
+            this.$refs.log.logInfo = {
+              logText: "开始扬声器测试",
+              logStatus: true,
+              logType: "success",
+            };
+          },
+          onPlayProgress: (id, curPtsMS, durationMS) => {
+            this.speakerProgress = Math.ceil((curPtsMS / durationMS) * 100);
+          },
+          onComplete: (id, errCode) => {
+            this.speakerProgress = 0;
+            this.$refs.log.logInfo = {
+              logText: "扬声器测试结束",
+              logStatus: true,
+              logType: "success",
+            };
+          },
+        });
+      }
     },
     stopTestSpeaker() {
-      this.speakerProgress = 0;
-      this.$refs.log.logInfo = {
-        logText: "扬声器测试结束",
-        logStatus: true,
-        logType: "warning",
-      };
-      this.trtcCloud.stopPlayMusic(1);
+      if (this.speakerList[0] === "未找到可用的扬声器") {
+        this.$refs.log.logInfo = {
+          logText: "未找到可用的扬声器",
+          logStatus: true,
+          logType: "error",
+        };
+      } else {
+        this.speakerProgress = 0;
+        this.$refs.log.logInfo = {
+          logText: "扬声器测试结束",
+          logStatus: true,
+          logType: "warning",
+        };
+        this.trtcCloud.stopPlayMusic(1);
+      }
     },
     startTestMic() {
-      this.$refs.log.logInfo = {
-        logText: "开始麦克风测试",
-        logStatus: true,
-        logType: "success",
-      };
-      this.trtcCloud.startMicDeviceTest(1000);
+      if (this.micList[0] === "未找到可用的麦克风") {
+        this.$refs.log.logInfo = {
+          logText: "未找到可用的麦克风",
+          logStatus: true,
+          logType: "error",
+        };
+      } else {
+        this.$refs.log.logInfo = {
+          logText: "开始麦克风测试",
+          logStatus: true,
+          logType: "success",
+        };
+        this.trtcCloud.startMicDeviceTest(1000);
+      }
     },
     stopTestMic() {
-      this.$refs.log.logInfo = {
-        logText: "麦克风测试结束",
-        logStatus: true,
-        logType: "warning",
-      };
-      this.trtcCloud.stopMicDeviceTest();
-      this.trtcCloud.stopMicDeviceTest();
-      this.micProgress = 0;
+      if (this.micList[0] === "未找到可用的麦克风") {
+        this.$refs.log.logInfo = {
+          logText: "未找到可用的麦克风",
+          logStatus: true,
+          logType: "error",
+        };
+      } else {
+        this.$refs.log.logInfo = {
+          logText: "麦克风测试结束",
+          logStatus: true,
+          logType: "warning",
+        };
+        this.trtcCloud.stopMicDeviceTest();
+        this.micProgress = 0;
+      }
     },
   },
   computed: {

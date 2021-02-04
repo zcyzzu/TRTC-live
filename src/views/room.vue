@@ -1,19 +1,8 @@
 <template>
-  <div>
-    <div id="power" class="d-flex justify-space-around align-center">
-      <div>
-        上行网络质量：
-        <v-btn :color="localNetworkQuality.color" small elevation="0">{{
-          localNetworkQuality.text
-        }}</v-btn>
-        <br />
-        <br />
-        下行网络质量：
-        <v-btn :color="remoteNetworkQuality.color" small elevation="0">{{
-          remoteNetworkQuality.text
-        }}</v-btn>
-      </div>
-      <div>
+  <div id="zcy">
+    <div id="video-container" style="background: #000"></div>
+    <div id="power" class="d-flex flex-column justify-end align-center">
+      <div class="my-4">
         <v-btn icon @click="toggleMic">
           <v-icon x-large v-if="micStatus === false" color="green"
             >mdi-microphone</v-icon
@@ -21,7 +10,7 @@
           <v-icon x-large v-else color="red">mdi-microphone</v-icon>
         </v-btn>
       </div>
-      <div>
+      <div class="mb-4">
         <v-btn icon @click="toggleVol">
           <v-icon x-large v-if="speakerStatus === false" color="green"
             >mdi-volume-high</v-icon
@@ -29,7 +18,7 @@
           <v-icon x-large v-else color="red">mdi-volume-high</v-icon>
         </v-btn>
       </div>
-      <div>
+      <div class="mb-4">
         <v-btn @click="exitRooms" icon>
           <v-icon x-large color="error">mdi-power</v-icon>
         </v-btn>
@@ -42,7 +31,7 @@
     >
       <span class="text-h3"> 当前房间没有讲师/讲师已离开 </span>
     </div>
-    <div id="video-container"></div>
+
     <log ref="log"></log>
   </div>
 </template>
@@ -56,8 +45,6 @@ import {
 } from "trtc-electron-sdk/liteav/trtc_define";
 import { mapState } from "vuex";
 import log from "@/components/log";
-import { ipcRenderer } from "electron";
-import { networkQualityEnumMapper } from "../common/qualityColorMapper";
 export default {
   components: {
     log,
@@ -73,14 +60,6 @@ export default {
       anchorIdList: [], // 主播ID列表
       remoteVideos: {}, // 存放远程用户视频列表
       noAnchorCountDown: 3, // 空房间倒计时检测的最大时长，如果达到了这个时间，仍没有触发 onUserVideoAvailable ，就会提示用户是否要退出此直播间。
-      localNetworkQuality: {
-        text: "很好",
-        color: "green",
-      },
-      remoteNetworkQuality: {
-        text: "很好",
-        color: "green",
-      },
     };
   },
   created() {
@@ -141,10 +120,7 @@ export default {
         this.noAnchorTimoutID = setTimeout(() => {
           if (this.anchorIdList.length === 0) {
             this.haveAnchor = true;
-            this.log(
-              "当前房间没有讲师，请退出检查房间口令是否输入正确！",
-              "error"
-            );
+            this.log("讲师还未进入房间！", "warning");
           }
         }, this.noAnchorCountDown * 1000);
       } catch (error) {
@@ -407,11 +383,9 @@ export default {
 <style lang="scss" scoped>
 #power {
   position: fixed;
-  left: 0;
+  right: 20px;
   bottom: 0;
-  right: 0;
-  height: 150px;
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
 }
 </style>

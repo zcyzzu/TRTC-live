@@ -3,7 +3,7 @@
     <v-dialog v-model="settingDailog" max-width="700" persistent>
       <v-card width="700" height="600">
         <div class="text-right">
-          <v-btn icon @click="settingDailog = false">
+          <v-btn icon @click="closeSetting">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -18,6 +18,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import setting from "@/components/setting";
 import general from "@/components/setting/general";
 import sound from "@/components/setting/sound";
@@ -42,6 +43,11 @@ export default {
         }, 0);
       }
     },
+    closeSetting() {
+      this.trtcCloud.stopPlayMusic(1);
+      this.trtcCloud.stopMicDeviceTest();
+      this.settingDailog = false;
+    },
   },
   watch: {
     settingDailog: function (newVal, oldVal) {
@@ -51,6 +57,9 @@ export default {
         }, 0);
       }
     },
+  },
+  computed: {
+    ...mapState(["trtcCloud"]),
   },
 };
 </script>
