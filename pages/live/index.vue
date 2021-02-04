@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      roomJwt: "1o0e5koTqgWJHQsorrzProEFpHc",
+      roomJwt: "1o1Lqp30hkxdY9SRZdlqnrE8V3V",
       reg: /[0-9A-Za-z]{27}/g,
     };
   },
