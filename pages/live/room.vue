@@ -39,11 +39,15 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+// import TRTC from "trtc-js-sdk";
 export default {
   data() {
     return {
       TRTC: null,
+      roomid: "",
+      sdkappid: "",
+      userid: "",
+      usersig: "",
       client: null,
       //客户端对象，提供实时音视频通话的核心能力，包括进房join()及退房leave()，发布本地流publish()及停止发布本地流unpublish()，订阅远端流subscribe()及取消订阅远端流unsubscribe()。
       localStream: null,
@@ -51,18 +55,23 @@ export default {
       speakerStatus: false,
       localNetworkQuality: {
         text: "很好",
-        color: "green"
+        color: "green",
       },
       remoteNetworkQuality: {
         text: "很好",
-        color: "green"
-      }
+        color: "green",
+      },
     };
   },
   created() {
+    // this.TRTC = TRTC;
     if (process.client) {
       this.TRTC = require("trtc-js-sdk");
     }
+    this.roomid = this.$route.query.roomid;
+    this.sdkappid = this.$route.query.sdkappid;
+    this.userid = this.$route.query.userid;
+    this.usersig = this.$route.query.usersig;
   },
   mounted() {
     this.isSupportBrowser();
@@ -70,51 +79,37 @@ export default {
       mode: "rtc",
       sdkAppId: this.sdkappid,
       userId: this.userid,
-      userSig: this.usersig
+      userSig: this.usersig,
     });
-    this.client.on("stream-added", event => {
+    this.client.on("stream-added", (event) => {
       const remoteStream = event.stream;
       console.log("远端流增加: " + remoteStream.getId());
       //订阅远端流
       this.client.subscribe(remoteStream);
     });
-    this.client.on("stream-subscribed", event => {
+    this.client.on("stream-subscribed", (event) => {
       const remoteStream = event.stream;
       console.log("远端流订阅成功：" + remoteStream.getId());
       // 播放远端流
       remoteStream.play("remote_stream", {
-        objectFit: "cover"
+        objectFit: "cover",
       });
     });
     this.client
       .join({ roomId: parseInt(this.roomid) })
-      .catch(error => {
+      .catch((error) => {
         console.error("进房失败 " + error);
       })
       .then(() => {
         console.log("进房成功");
       });
   },
-  beforeRouteEnter(to, from, next) {
-    // 在渲染该组件的对应路由被 confirm 前调用
-    // 不！能！获取组件实例 `this`
-    // 因为当守卫执行前，组件实例还没被创建
-    // 可以通过传一个回调给 next来访问组件实例
-    next(vm => {
-      // 通过 `vm` 访问组件实例
-    });
-  },
-  beforeRouteLeave(to, from, next) {
-    this.exitRoom(true);
-    next();
-  },
-
   methods: {
     /**
      * @description 判断当前浏览器是否支持trtc
      */
     isSupportBrowser() {
-      this.TRTC.checkSystemRequirements().then(checkResult => {
+      this.TRTC.checkSystemRequirements().then((checkResult) => {
         if (!checkResult.result) {
           console.log("不支持的浏览器");
         } else {
@@ -138,18 +133,15 @@ export default {
           document.querySelector("#remote_stream").innerHTML = "";
           if (!status) {
             this.$router.push({
-              path: "/live"
+              path: "/live",
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("退房失败 " + error);
         });
-    }
+    },
   },
-  computed: {
-    ...mapState(["userid", "roomid", "sdkappid", "usersig"])
-  }
 };
 </script>
 <style lang="scss" scoped>
@@ -164,7 +156,5 @@ export default {
   height: 150px;
   background: rgba(0, 0, 0, 0.3);
   color: white;
-}
-#remote_stream {
 }
 </style>

@@ -57,10 +57,7 @@ export default {
      ** Plugins to load before mounting the App
      ** https://nuxtjs.org/guide/plugins
      */
-    // plugins: [{
-    //     src: "~/plugins/trtc-js-sdk.js",
-    //     ssr: false
-    // }],
+    plugins: ['~/plugins/axios'],
     /*
      ** Auto import components
      ** See https://nuxtjs.org/api/configuration-components
@@ -75,8 +72,19 @@ export default {
      */
     modules: [
         // Doc: https://axios.nuxtjs.org/usage
-        "@nuxtjs/axios"
+        "@nuxtjs/axios",
+        '@nuxtjs/proxy'
     ],
+    proxy: {
+        '/api': {
+            target: 'https://live.daoshi.cloud/api/v2/',
+            secure: false, // 如果是https接口，需要配置这个参数
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': '',
+            },
+        }
+    },
     /*
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options

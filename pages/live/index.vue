@@ -16,6 +16,7 @@
         hide-details=""
         @keydown.enter="enterRoom"
         class="px-6 mb-4 white--text"
+        append-icon="mdi-arrow-right-bold-outline"
       ></v-text-field>
       <v-row no-gutters class="d-flex justify-center">
         <v-btn
@@ -24,7 +25,7 @@
           large
           @click="enterRoom"
           color="blue dark-1"
-          class=" white--text mr-4"
+          class="white--text mr-4"
           >进入房间</v-btn
         >
       </v-row>
@@ -42,15 +43,28 @@ import settingDialog from "@/components/live/settingDialog";
 export default {
   components: {
     settingDialog,
-    log
+    log,
   },
   data() {
     return {
-      roomJwt: "Hq1OUV5DQ2WiiOO2__fau"
+      roomJwt: "1o0e5koTqgWJHQsorrzProEFpHc",
+      reg: /[0-9A-Za-z]{27}/g,
     };
   },
-  created() {},
-  mounted() {},
+  mounted() {
+    let roomJwtFromUrl = this.$route.query.roomJwt;
+    if (roomJwtFromUrl) {
+      if (this.reg.test(roomJwtFromUrl)) {
+        this.enterRoom();
+      } else {
+        this.$refs.log.logInfo = {
+          logText: "进入房间失败，请输入正确房间口令进入！",
+          logStatus: true,
+          logType: "error",
+        };
+      }
+    }
+  },
   methods: {
     /**
      * @description 打开dialog设置窗口
@@ -59,31 +73,33 @@ export default {
       this.$refs.dialogEle.settingDailog = true;
     },
     enterRoom() {
-      let reg = /[0123456789ABCDEFGHJKLMNOPQRSTUVWXYZ_abcdefghijkmnopqrstuvwxyz-]{21}/g;
+      let reg = /[0-9A-Za-z]{27}/g;
       if (reg.test(this.roomJwt)) {
-        this.$axios
-          .get(`https://live.daoshi.cloud/api/v2/roominfo/${this.roomJwt}`)
-          .then(
-            val => {
-              this.$store.commit("setLoginInfo", val.data);
-            },
-            err => {
-              this.$refs.log.logInfo = {
-                logText: "请检查网络链接/口令是否正确",
-                logStatus: true,
-                logType: "error"
-              };
-            }
-          );
+        this.$axios.get(`/api/roominfo/${this.roomJwt}`).then(
+          (val) => {
+            // this.$store.commit("setLoginInfo", val.data);
+            this.$router.push({
+              path: "/live/room",
+              query: val.data,
+            });
+          },
+          (err) => {
+            this.$refs.log.logInfo = {
+              logText: "请检查网络链接/口令是否正确",
+              logStatus: true,
+              logType: "error",
+            };
+          }
+        );
       } else {
         this.$refs.log.logInfo = {
           logText: "口令格式填写错误",
           logStatus: true,
-          logType: "error"
+          logType: "error",
         };
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
