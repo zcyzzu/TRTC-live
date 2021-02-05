@@ -1,40 +1,29 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+  <v-app>
+    <div
+      style="height: 100%"
+      class="d-flex flex-column justify-center align-center"
+    >
+      <v-icon color="red" class="mb-4" x-large>mdi-alert-circle-outline</v-icon>
+      <p class="text-md-h4 text-subtitle-1">错误码： {{ error.statusCode }}</p>
+      <p class="text-md-h5 text-subtitle-2">
+        {{ error.message }}
+      </p>
+      <p class="text-md-h5 text-subtitle-2">{{ error.desc }}</p>
+    </div>
   </v-app>
 </template>
 
 <script>
 export default {
-  layout: 'empty',
+  layout: "empty",
   props: {
     error: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
-  },
-  head () {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title
-    }
-  }
-}
+};
 </script>
 
 <style scoped>

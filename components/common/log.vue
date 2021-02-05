@@ -19,19 +19,19 @@ export default {
       logInfo: {
         logText: "这是消息通知条!",
         logStatus: false,
-        logType: "success"
-      }
+        logType: "success",
+      },
     };
   },
   watch: {
-    "logInfo.logStatus": function(newVal, oldVal) {
+    "logInfo.logStatus": function (newVal, oldVal) {
       if (newVal) {
         setTimeout(() => {
           this.logInfo.logStatus = false;
-        }, 2000);
+        }, 3000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -29,25 +29,28 @@
           >进入房间</v-btn
         >
       </v-row>
-      <v-row no-gutters class="d-flex justify-center">
+      <!-- <v-row no-gutters class="d-flex justify-center">
         <v-btn text @click="setting" class="white--text">设置</v-btn>
-      </v-row>
+      </v-row> -->
     </div>
     <log ref="log"></log>
     <settingDialog ref="dialogEle"></settingDialog>
+    <overlay ref="overlays" @exitRoom="exitRoom"></overlay>
   </div>
 </template>
 <script>
 import log from "~/components/common/log";
+import overlay from "~/components/common/overlay";
 import settingDialog from "@/components/live/settingDialog";
 export default {
   components: {
     settingDialog,
     log,
+    overlay,
   },
   data() {
     return {
-      roomJwt: "1o1Lqp30hkxdY9SRZdlqnrE8V3V",
+      roomJwt: "1o3cHXaVh9JYok4E0iYGzpa5ZBW",
       reg: /[0-9A-Za-z]{27}/g,
     };
   },
@@ -69,17 +72,21 @@ export default {
     /**
      * @description 打开dialog设置窗口
      */
-    setting() {
-      this.$refs.dialogEle.settingDailog = true;
-    },
+    // setting() {
+    //   this.$refs.dialogEle.settingDailog = true;
+    // },
     enterRoom() {
       let reg = /[0-9A-Za-z]{27}/g;
       if (reg.test(this.roomJwt)) {
+        this.$refs.overlays.info = {
+          text: "正在进入，请稍后!",
+          isOverlay: true,
+        };
         this.$axios.get(`/api/roominfo/${this.roomJwt}`).then(
           (val) => {
-            // this.$store.commit("setLoginInfo", val.data);
+            this.$refs.overlays.info.isOverlay = false;
             this.$router.push({
-              path: "/live/room",
+              path: "/room",
               query: val.data,
             });
           },
@@ -98,6 +105,9 @@ export default {
           logType: "error",
         };
       }
+    },
+    exitRoom() {
+      this.$refs.overlays.info.isOverlay = false;
     },
   },
 };
