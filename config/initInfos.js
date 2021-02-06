@@ -27,7 +27,7 @@ export const initInfos = {
         downloadInfo: "MacOS",
         block: true,
         icon: "mdi-apple",
-        href: "https://openstore.daoshi.cloud/zhibola/zhibola_latest_mac.dmg"
+        href: "https://openstore.daoshi.cloud/zhibola/history/zhibola/zhibola_latest_mac.dmg"
     },
 
     //从这里开始是测试
@@ -35,7 +35,7 @@ export const initInfos = {
         downloadInfo: "Windows 10 / 8",
         block: true,
         icon: "mdi-microsoft-windows",
-        href: "https://openstore.daoshi.cloud/zhibola/zhibola_latest_win_x64%20.exe"
+        href: "https://openstore.daoshi.cloud/zhibola/history/zhibola/zhibola_latest_win.exe"
     },
     win7: {
         downloadInfo: "Windows 7",

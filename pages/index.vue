@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      roomJwt: "1o3cHXaVh9JYok4E0iYGzpa5ZBW",
+      roomJwt: "",
       reg: /[0-9A-Za-z]{27}/g,
     };
   },

@@ -1,9 +1,9 @@
 <template>
   <div class="zIndex">
     <pageBar></pageBar>
-    <div style="min-height:85vh" class="d-flex align-center justify-center">
+    <div style="min-height: 85vh" class="d-flex align-center justify-center">
       <div class="d-flex justify-center">
-        <div id="downloadCard" style="opacity:0">
+        <div id="downloadCard" style="opacity: 0">
           <!-- -------------------------------------------------------------------------- -->
           <div class="d-flex justify-center">
             <v-card
@@ -12,7 +12,10 @@
               color="#3f51a5"
               elevation="0"
             >
-              <div class="d-flex flex-column justify-center" style="height:100%">
+              <div
+                class="d-flex flex-column justify-center"
+                style="height: 100%"
+              >
                 <recommend :info="userAgentInfo"></recommend>
                 <v-btn
                   max-height="60"
@@ -23,7 +26,9 @@
                   class="white--text mb-3"
                 >
                   更多版本下载
-                  <v-icon id="reverseIcon" color="white" right>mdi-chevron-down</v-icon>
+                  <v-icon id="reverseIcon" color="white" right
+                    >mdi-chevron-down</v-icon
+                  >
                 </v-btn>
               </div>
             </v-card>
@@ -34,9 +39,13 @@
             color="#3f51a5"
             elevation="0"
             id="cards"
-            style="position:relative;top:-1px"
+            style="position: relative; top: -1px"
           >
-            <moreVersion @historyVersion="historyVersion" :info="userAgentInfo" ref="moreVersion"></moreVersion>
+            <moreVersion
+              @historyVersion="historyVersion"
+              :info="userAgentInfo"
+              ref="moreVersion"
+            ></moreVersion>
           </v-card>
           <!-- ---------------------------------------------------------------------------->
         </div>
@@ -60,14 +69,14 @@ export default {
   components: {
     pageBar,
     moreVersion,
-    historyVersion
+    historyVersion,
   },
   data() {
     return {
       userAgentInfo: Object,
       isReverseIcon: true,
       isHeight: true,
-      cardsHeight: 0
+      cardsHeight: 0,
     };
   },
   beforeMount() {
@@ -94,7 +103,7 @@ export default {
           duration: 0.4,
           onComplete: () => {
             this.$refs.moreVersion.isShow = !this.$refs.moreVersion.isShow;
-          }
+          },
         });
       } else {
         gsap.to("#cards", {
@@ -102,12 +111,12 @@ export default {
           duration: 0.4,
           onStart: () => {
             this.$refs.moreVersion.isShow = !this.$refs.moreVersion.isShow;
-          }
+          },
         });
       }
       this.isHeight = !this.isHeight;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
